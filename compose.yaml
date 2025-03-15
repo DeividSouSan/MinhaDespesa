@@ -1,0 +1,21 @@
+services:
+  php:
+    image: php:8.0-apache
+    container_name: my-php-app
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www/html
+    command: bash -c "apt-get update && apt-get install -y libpng-dev && docker-php-ext-install mysqli && apache2-foreground"
+  mysql:
+    image: mysql:9.1.0
+    container_name: mysql-database
+    ports:
+     - 3306:3306
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: local_db
+      MYSQL_USER: local_user
+      MYSQL_PASSWORD: local_password
+      MYSQL_ROOT_PASSWORD: local_password
