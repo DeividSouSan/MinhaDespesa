@@ -1,6 +1,8 @@
 # MinhaDespesa
 
-> O **MinhaDespesa** é um sistema minimalista de gestão financeira pessoal, desenvolvido com o objetivo de proporcionar aos usuários uma maneira simples e intuitiva de acompanhar suas finanças. O foco principal é oferecer uma visão clara e objetiva da situação financeira, evitando complexidade desnecessária. 
+> O **MinhaDespesa** é um sistema minimalista de gestão financeira pessoal, desenvolvido com o objetivo de proporcionar aos usuários uma maneira simples e intuitiva de acompanhar suas finanças. O foco principal é oferecer uma visão clara e objetiva da situação financeira, evitando complexidade desnecessária.
+> ![image](https://github.com/user-attachments/assets/32c030a4-8c95-426c-8901-caca230a2e90)
+
 
 ## Funcionalidades
 
