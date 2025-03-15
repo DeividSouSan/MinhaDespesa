@@ -8,6 +8,7 @@
 
 - [x] **Cadastro de Despesas e Receitas**: Permite o registro de despesas realizadas e receitas, facilitando o acompanhamento dos fluxos de caixa.
 - [ ] **Planejamento de Despesas Futuras**: Oferece a possibilidade de projetar despesas futuras, auxiliando no planejamento financeiro.
+- [ ] **Atualização e Remoção de Receitas e Despesas**: Permite ao usuário a possibilidade de atualizar e remover receitas e despesas já cadastradas.
 - [ ] **Visualização Intuitiva**: Fornece uma interface limpa e direta, garantindo que os usuários possam acessar rapidamente as informações financeiras essenciais.
 
 ## Tecnologias Utilizadas
