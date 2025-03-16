@@ -68,25 +68,25 @@ function set_transaction_type(Transaction $transaction): string
         </div>
 
         <section class="form-wrapper">
-            <form action="index.php" method='POST'>
+            <form action="index.php" method='GET'>
                 <section class='field-wrapper'>
                     <label for="type">Tipo (📤/📥)</label>
                     <select name="type" id="type" onchange="this.form.submit()">
-                        <option value=" despesa" <?php echo (!isset($_POST['type']) || $_POST['type'] == 'despesa') ? 'selected' : ''; ?>>🔴Despesa</option>
-                        <option value="receita" <?php echo (isset($_POST['type']) && $_POST['type'] == 'receita') ? 'selected' : ''; ?>>🟢Receita</option>
+                        <option value=" despesa" <?php echo (!isset($_GET['type']) || $_GET['type'] == 'despesa') ? 'selected' : ''; ?>>🔴Despesa</option>
+                        <option value="receita" <?php echo (isset($_GET['type']) && $_GET['type'] == 'receita') ? 'selected' : ''; ?>>🟢Receita</option>
                     </select>
                 </section>
             </form>
 
             <form action="index.php" method='POST'>
-                <input type="hidden" name="type" id='type' value=<?php echo (isset($_POST['type'])) ? $_POST['type'] : 'despesa'; ?>>
+                <input type="hidden" name="type" id='type' value=<?php echo (isset($_GET['type'])) ? $_GET['type'] : 'despesa'; ?>>
 
                 <section class='field-wrapper'>
                     <label for="value">💵 Valor (R$) </label>
                     <input type="number" name="value" id="value" placeholder="0,00" step="any">
                 </section>
 
-                <?php if (isset($_POST['type']) && $_POST['type'] == 'receita'): ?>
+                <?php if (isset($_GET['type']) && $_GET['type'] == 'receita'): ?>
                     <section class='field-wrapper'>
                         <label for=" category">🗃 Categoria</label>
                         <select name="category" id="category">
@@ -182,7 +182,7 @@ function set_transaction_type(Transaction $transaction): string
                     </tbody>
                 </table>
             <?php else: ?>
-                Sem transacoes realizadas
+                Sem transações realizadas;
             <?php endif ?>
         </section>
     </main>
