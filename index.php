@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+//session_unset();
+
 define('DATABASE_HOST', 'mysql-database');
 define('DATABASE_PORT', 3306);
 define('DATABASE_NAME', 'local_db');
@@ -61,7 +63,7 @@ function set_transaction_type(Transaction $transaction): string
 <body>
     <header>
         <div>
-            <h1>Minha despesa</h1>
+            <h1 class="app-logo">Minha🪙Despesa</h1>
             <img src="" alt="">
         </div>
 
