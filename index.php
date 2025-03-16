@@ -177,6 +177,7 @@ function set_transaction_type(Transaction $transaction): string
                                 <td><?php echo $formated_transaction_date; ?> </td>
                             </tr>
                         <?php endforeach ?>
+                    </tbody>
                 </table>
             <?php else: ?>
                 Sem transacoes realizadas
