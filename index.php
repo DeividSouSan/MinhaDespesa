@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+//session_unset();
+
 define('DATABASE_HOST', 'mysql-database');
 define('DATABASE_PORT', 3306);
 define('DATABASE_NAME', 'local_db');
@@ -36,6 +38,17 @@ class Transaction
         $this->type = $type;
     }
 }
+
+function set_transaction_type(Transaction $transaction): string
+{
+    if ($transaction->type == "despesa") {
+        $transaction_date = new DateTime($transaction->date);
+        $current_date = new DateTime(date('Y-m-d', time()));
+
+        return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
+    }
+    return "receita";
+};
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +63,7 @@ class Transaction
 <body>
     <header>
         <div>
-            <h1>Minha despesa</h1>
+            <h1 class="app-logo">Minha🪙Despesa</h1>
             <img src="" alt="">
         </div>
 
@@ -153,18 +166,20 @@ class Transaction
                     <tbody>
                         <?php foreach ($_SESSION['transacoes'] as $transacao): ?>
                             <?php
-                            $classe = $transacao->type == "despesa" ? "despesa" : ($transacao->type == "receita" ? "receita" : "");
+                            $classe = set_transaction_type($transacao);
                             $formated_value = number_format($transacao->value, 2, ',', '.');
-                            $formated_date = (new DateTime($transacao->date))->format('d/m/Y');
+                            $formated_transaction_date = (new DateTime($transacao->date))->format('d/m/Y');
+
                             ?>
                             <tr class='<?php echo $classe ?>'>
                                 <td><?php echo $transacao->type; ?></td>
                                 <td><?php echo "R$ {$formated_value}"; ?> </td>
                                 <td><?php echo $transacao->category; ?> </td>
                                 <td><?php echo $transacao->description; ?> </td>
-                                <td><?php echo $formated_date; ?> </td>
+                                <td><?php echo $formated_transaction_date; ?> </td>
                             </tr>
                         <?php endforeach ?>
+                    </tbody>
                 </table>
             <?php else: ?>
                 Sem transacoes realizadas

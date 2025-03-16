@@ -11,16 +11,29 @@ body {
     height: 100vh;
 }
 
-
-h1 {
-    text-align: center;
-}
-
 header {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .app-logo {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 3rem;
+        font-weight: 200;
+        letter-spacing: 0.2rem;
+        background-color: #E9E9E9;
+        color: #333;
+
+        display: inline-block;
+        margin: 20px auto;
+        padding: 10px 20px;
+
+        border: 1px solid #ccc;
+        border-radius: 0.2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
 
     .form-wrapper {
         display: flex;
@@ -70,7 +83,7 @@ header {
                     width: 200px;
                     text-transform: uppercase;
                     font-weight: 800;
-                    background-color: rgb(247, 234, 120);
+                    background-color: #FFF176;
                 }
 
                 >input[type='submit']:hover {
@@ -93,47 +106,67 @@ main {
     align-items: center;
     flex: 1;
 
-
-    >.transactions-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        flex: 1;
-        width: 100%;
-        text-transform: uppercase;
-
+    .transactions-wrapper {
+        max-width: 800px;
+        margin: 20px auto;
+        overflow-x: auto;
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
     table {
-        border: 1px solid rgba(0, 0, 0, 0.39);
-        border-radius: 0.25rem;
-        box-shadow: 0px 00px 10px 0px rgba(0, 0, 0, 0.342);
-        background-color: rgb(233, 233, 233);
-        padding: 1rem;
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        font-size: 16px;
+        cursor: default;
+    }
 
-        & th {
-            font-family: 'Courier New', Courier, monospace;
-            color: gray;
-        }
+    /* Header */
+    th {
+        background: #ddd;
+        text-transform: uppercase;
+        padding: 12px;
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 2px solid #bbb;
+        color: rgb(78, 78, 78);
+    }
 
-        & .receita * {
-            color: rgb(46, 46, 46);
-            background-color: rgba(169, 247, 169, 0.68);
-            border: 1px solid rgba(60, 128, 60, 0.527);
-            border-radius: 0.25rem;
-            padding: 0.5rem;
-            text-align: center;
-        }
+    /* General Cell Styling */
+    td {
+        padding: 10px;
+        text-align: center;
+        font-weight: 100;
+        text-transform: capitalize;
+        font-size: 14px;
 
-        & .despesa * {
-            color: rgb(46, 46, 46);
-            background-color: rgba(241, 149, 149, 0.589);
-            border: 1px solid rgba(228, 113, 113, 0.527);
-            border-radius: 0.25rem;
-            padding: 0.5rem;
-            text-align: center;
-        }
+    }
+
+    /* Row Colors */
+    .receita {
+        background: #c3f7c3;
+        /* Light green */
+        color: #2b6e2b;
+    }
+
+    .despesa {
+        background: #f7c3c3;
+        /* Light red */
+        color: #6e2b2b;
+    }
+
+    .despesa-futura {
+        background: #f7e0c3;
+        /* Light orange */
+        color: #6e4b2b;
+    }
+
+    /* Hover Effect */
+    tr:hover td {
+        background: rgba(0, 0, 0, 0.05);
     }
 }
 
