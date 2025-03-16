@@ -64,12 +64,9 @@ class TransactionRepository
     function read()
     {
         $transactions = $this->database->query("SELECT * FROM Transaction;");
-<<<<<<< Updated upstream
-=======
         if ($transactions->num_rows == 0) {
             return null;
         };
->>>>>>> Stashed changes
         return $transactions;
     }
 
