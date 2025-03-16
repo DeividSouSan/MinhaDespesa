@@ -64,6 +64,9 @@ class TransactionRepository
     function read()
     {
         $transactions = $this->database->query("SELECT * FROM Transaction;");
+        if ($transactions->num_rows == 0) {
+            return null;
+        };
         return $transactions;
     }
 
