@@ -61,6 +61,12 @@ class TransactionRepository
         $this->database = $db;
     }
 
+    function read()
+    {
+        $transactions = $this->database->query("SELECT * FROM Transaction;");
+        return $transactions;
+    }
+
     function add(TransactionDTO $transaction)
     {
         $value = $transaction->value;
@@ -106,6 +112,7 @@ function set_transaction_type(TransactionDTO $transaction): string
 };
 
 $transactionRepository = new TransactionRepository($db);
+
 ?>
 
 <!DOCTYPE html>
@@ -203,7 +210,7 @@ $transactionRepository = new TransactionRepository($db);
         ?>
 
         <section class="transactions-wrapper">
-            <?php if (isset($_SESSION["transacoes"])): ?>
+            <?php if ($transactionRepository->read()): ?>
                 <table>
                     <thead>
                         <tr>
@@ -215,18 +222,19 @@ $transactionRepository = new TransactionRepository($db);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($_SESSION['transacoes'] as $transacao): ?>
+                        <?php foreach ($transactionRepository->read() as $transaction): ?>
                             <?php
-                            $classe = set_transaction_type($transacao);
-                            $formated_value = number_format($transacao->value, 2, ',', '.');
-                            $formated_transaction_date = (new DateTime($transacao->date))->format('d/m/Y');
+                            $transaction = new TransactionDTO($transaction['value'], $transaction['category'], $transaction['date'], $transaction['description'], $transaction['type']);
+                            $classe = set_transaction_type($transaction);
+                            $formated_value = number_format($transaction->value, 2, ',', '.');
+                            $formated_transaction_date = ($transaction->date)->format('d/m/Y');
 
                             ?>
                             <tr class='<?php echo $classe ?>'>
-                                <td><?php echo $transacao->type; ?></td>
+                                <td><?php echo $transaction->type; ?></td>
                                 <td><?php echo "R$ {$formated_value}"; ?> </td>
-                                <td><?php echo $transacao->category; ?> </td>
-                                <td><?php echo $transacao->description; ?> </td>
+                                <td><?php echo $transaction->category; ?> </td>
+                                <td><?php echo $transaction->description; ?> </td>
                                 <td><?php echo $formated_transaction_date; ?> </td>
                             </tr>
                         <?php endforeach ?>
