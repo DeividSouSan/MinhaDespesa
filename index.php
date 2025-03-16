@@ -153,16 +153,27 @@ class Transaction
                     <tbody>
                         <?php foreach ($_SESSION['transacoes'] as $transacao): ?>
                             <?php
-                            $classe = $transacao->type == "despesa" ? "despesa" : ($transacao->type == "receita" ? "receita" : "");
+                            $escolhe_classe = function (Transaction $transacao): string {
+                                if ($transacao->type == "despesa") {
+                                    $transaction_date = new DateTime($transacao->date);
+                                    $current_date = new DateTime(date('Y-m-d', time()));
+
+                                    return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
+                                }
+                                return "receita";
+                            };
+
+                            $classe = $escolhe_classe($transacao);
                             $formated_value = number_format($transacao->value, 2, ',', '.');
-                            $formated_date = (new DateTime($transacao->date))->format('d/m/Y');
+                            $formated_transaction_date = (new DateTime($transacao->date))->format('d/m/Y');
+
                             ?>
                             <tr class='<?php echo $classe ?>'>
                                 <td><?php echo $transacao->type; ?></td>
                                 <td><?php echo "R$ {$formated_value}"; ?> </td>
                                 <td><?php echo $transacao->category; ?> </td>
                                 <td><?php echo $transacao->description; ?> </td>
-                                <td><?php echo $formated_date; ?> </td>
+                                <td><?php echo $formated_transaction_date; ?> </td>
                             </tr>
                         <?php endforeach ?>
                 </table>
