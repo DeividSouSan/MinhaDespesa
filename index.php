@@ -36,6 +36,17 @@ class Transaction
         $this->type = $type;
     }
 }
+
+function set_transaction_type(Transaction $transaction): string
+{
+    if ($transaction->type == "despesa") {
+        $transaction_date = new DateTime($transaction->date);
+        $current_date = new DateTime(date('Y-m-d', time()));
+
+        return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
+    }
+    return "receita";
+};
 ?>
 
 <!DOCTYPE html>
@@ -153,17 +164,7 @@ class Transaction
                     <tbody>
                         <?php foreach ($_SESSION['transacoes'] as $transacao): ?>
                             <?php
-                            $escolhe_classe = function (Transaction $transacao): string {
-                                if ($transacao->type == "despesa") {
-                                    $transaction_date = new DateTime($transacao->date);
-                                    $current_date = new DateTime(date('Y-m-d', time()));
-
-                                    return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
-                                }
-                                return "receita";
-                            };
-
-                            $classe = $escolhe_classe($transacao);
+                            $classe = set_transaction_type($transacao);
                             $formated_value = number_format($transacao->value, 2, ',', '.');
                             $formated_transaction_date = (new DateTime($transacao->date))->format('d/m/Y');
 
