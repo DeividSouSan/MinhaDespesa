@@ -130,7 +130,16 @@ main {
             color: rgb(46, 46, 46);
             background-color: rgba(241, 149, 149, 0.589);
             border: 1px solid rgba(228, 113, 113, 0.527);
-            border-radius: 0.25rem;
+            border-radius: 0.1rem;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        & .despesa-futura * {
+            color: rgb(46, 46, 46);
+            background-color: rgba(252, 186, 112, 0.589);
+            border: 1px solid rgba(228, 174, 113, 0.527);
+            border-radius: 0.1rem;
             padding: 0.5rem;
             text-align: center;
         }
