@@ -1,27 +1,39 @@
 <?php
-session_start();
-
-//session_unset();
-
 define('DATABASE_HOST', 'mysql-database');
 define('DATABASE_PORT', 3306);
 define('DATABASE_NAME', 'local_db');
 define('DATABASE_USER', 'local_user');
 define('DATABASE_PASSWORD', 'local_password');
 
-$db = mysqli_connect(
-    DATABASE_HOST,
-    DATABASE_USER,
-    DATABASE_PASSWORD,
-    DATABASE_NAME,
-    DATABASE_PORT
-);
+try {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-if (mysqli_connect_errno()) {
-    die("Connection Failed: " . mysqli_connect_errno());
+    $db = mysqli_connect(
+        DATABASE_HOST,
+        DATABASE_USER,
+        DATABASE_PASSWORD,
+        DATABASE_NAME,
+        DATABASE_PORT
+    );
+
+    $create_transactions_table_query = $db->prepare("
+    CREATE TABLE IF NOT EXISTS Transaction 
+    (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        value DECIMAL(10, 2) NOT NULL,
+        category VARCHAR(255) NOT NULL,
+        date DATE NOT NULL,
+        description TEXT,
+        type ENUM('despesa', 'receita') NOT NULL
+    );");
+
+    $create_transactions_table_query->execute();
+} catch (mysqli_sql_exception) {
+    echo 'Não foi possível conectar ao banco de dados.';
 }
 
-class Transaction
+// Entities
+class TransactionDTO
 {
     public $value;
     public $category;
@@ -31,24 +43,69 @@ class Transaction
 
     function __construct(string $value, string $category, string $date, string $description, string $type)
     {
-        $this->value = $value;
+        $this->value = (float) $value;
         $this->category = $category;
-        $this->date = $date;
+        $this->date = new DateTime($date);
         $this->description = $description;
         $this->type = $type;
     }
 }
 
-function set_transaction_type(Transaction $transaction): string
+// Repositories
+class TransactionRepository
+{
+    public mysqli $database;
+
+    function __construct(mysqli $db)
+    {
+        $this->database = $db;
+    }
+
+    function add(TransactionDTO $transaction)
+    {
+        $value = $transaction->value;
+        $category = $transaction->category;
+        $date = $transaction->date->format('Y/m/d');
+        $description = $transaction->description;
+        $type = $transaction->type;
+
+        try {
+            $stmt = $this->database->prepare("
+            INSERT INTO Transaction (value, category, date, description, type)
+            VALUES (?,?,?,?,?);
+            ");
+
+            $stmt->bind_param("dssss", $value, $category, $date, $description, $type);
+
+            $result = $stmt->execute();
+
+            /*
+            if ($result == true) {
+                echo "hey";
+            } else {
+                echo "aff";
+            }*/
+        } catch (Exception $err) {
+            echo $err;
+        }
+    }
+
+    function remove() {}
+}
+
+
+function set_transaction_type(TransactionDTO $transaction): string
 {
     if ($transaction->type == "despesa") {
-        $transaction_date = new DateTime($transaction->date);
+        $transaction_date = $transaction->date;
         $current_date = new DateTime(date('Y-m-d', time()));
 
         return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
     }
     return "receita";
 };
+
+$transactionRepository = new TransactionRepository($db);
 ?>
 
 <!DOCTYPE html>
@@ -139,14 +196,8 @@ function set_transaction_type(Transaction $transaction): string
                 $description = $_POST['description'];
                 $type = (isset($_POST['type']) ? $_POST['type'] : 'despesa');
 
-                $transacao = new Transaction($value, $category, $date, $description, $type);
-
-                if (isset($_SESSION['transacoes'])) {
-                    $_SESSION['transacoes'][] = $transacao;
-                } else {
-                    $_SESSION['transacoes'] = [];
-                    array_unshift($_SESSION['transacoes'], $transacao);
-                }
+                $transaction = new TransactionDTO($value, $category, $date, $description, $type);
+                $transactionRepository->add($transaction);
             }
         }
         ?>
