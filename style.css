@@ -109,7 +109,6 @@ main {
     .transactions-wrapper {
         max-width: 800px;
         margin: 20px auto;
-        overflow-x: auto;
         background: white;
         border-radius: 10px;
         padding: 10px;
@@ -142,7 +141,6 @@ main {
         font-weight: 100;
         text-transform: capitalize;
         font-size: 14px;
-
     }
 
     /* Row Colors */
@@ -167,6 +165,15 @@ main {
     /* Hover Effect */
     tr:hover td {
         background: rgba(0, 0, 0, 0.05);
+    }
+
+    tr {
+        transition: scale 0.2s ease-in-out;
+    }
+
+    tr:hover {
+        scale: 1.1;
+
     }
 }
 
