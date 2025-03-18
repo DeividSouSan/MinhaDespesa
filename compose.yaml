@@ -1,6 +1,6 @@
 services:
   php:
-    image: php:8.0-apache
+    image: php:8.2-apache
     container_name: my-php-app
     ports:
       - 8080:80
