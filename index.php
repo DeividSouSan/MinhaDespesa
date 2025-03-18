@@ -48,7 +48,7 @@ enum CategoryIcon: string
     case Lazer = '🧘‍♂️';
 }
 
-// Entities
+// DTO
 class TransactionDTO
 {
     public $value;
@@ -64,6 +64,66 @@ class TransactionDTO
         $this->date = new DateTime($date);
         $this->description = $description;
         $this->type = $type;
+    }
+}
+
+class TransactionViewDTO
+{
+    public $value;
+    public $category;
+    public $date;
+    public $description;
+    public $type;
+
+    function __construct(string $value, string $category, string $date, string $description, string $type)
+    {
+        $this->value = $this->format_value($value);
+        $this->category = $category;
+        $this->date = $this->format_date($date);
+        $this->description = $description;
+        $this->type = $this->format_type($type, $date);
+    }
+
+    public function format_value(string $value): string
+    {
+        $value = (float) $value;
+        return number_format($value, 2, ',', '.');
+    }
+
+    public function format_type(string $type, string $date): string
+    {
+        if ($type == "despesa") {
+            $transaction_date = $date;
+            $current_date = new DateTime(date('Y-m-d', time()));
+
+            return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
+        }
+        return "receita";
+    }
+
+    public function format_date($date): string
+    {
+        $date = (new DateTime($date))->format('d/m/Y');
+
+        $months = [
+            '01' => 'Janeiro',
+            '02' => 'Fevereiro',
+            '03' => 'Março',
+            '04' => 'Abril',
+            '05' => 'Maio',
+            '06' => 'Junho',
+            '07' => 'Julho',
+            '08' => 'Agosto',
+            '09' => 'Setembro',
+            '10' => 'Outubro',
+            '11' => 'Novembro',
+            '12' => 'Dezembro'
+        ];
+
+        $dateParts = explode('/', $date);
+        $formattedDate = "{$dateParts[0]} de {$months[$dateParts[1]]} de {$dateParts[2]}";
+
+        return $formattedDate;
     }
 }
 
@@ -118,20 +178,7 @@ class TransactionRepository
     function remove() {}
 }
 
-
-function set_transaction_type(TransactionDTO $transaction): string
-{
-    if ($transaction->type == "despesa") {
-        $transaction_date = $transaction->date;
-        $current_date = new DateTime(date('Y-m-d', time()));
-
-        return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
-    }
-    return "receita";
-};
-
 $transactionRepository = new TransactionRepository($db);
-
 ?>
 
 <!DOCTYPE html>
@@ -218,7 +265,6 @@ $transactionRepository = new TransactionRepository($db);
             if (isset($_POST['value']) && isset($_POST['category']) && isset($_POST['date']) && isset($_POST['description'])) {
                 $value = $_POST['value'];
                 $category = $_POST['category'];
-                var_dump($category);
                 $date = $_POST['date'];
                 $description = $_POST['description'];
                 $type = (isset($_POST['type']) ? $_POST['type'] : 'despesa');
@@ -228,7 +274,6 @@ $transactionRepository = new TransactionRepository($db);
             }
         }
         ?>
-
         <section class="transactions-wrapper">
             <?php if ($transactionRepository->read()): ?>
                 <table>
@@ -243,39 +288,19 @@ $transactionRepository = new TransactionRepository($db);
                     <tbody>
                         <?php foreach ($transactionRepository->read() as $transaction): ?>
                             <?php
-                            $transaction = new TransactionDTO($transaction['value'], $transaction['category'], $transaction['date'], $transaction['description'], $transaction['type']);
-                            $classe = set_transaction_type($transaction);
-                            $formated_value = number_format($transaction->value, 2, ',', '.');
-                            $formated_transaction_date = ($transaction->date)->format('d/m/Y');
-
-                            $months = [
-                                '01' => 'Janeiro',
-                                '02' => 'Fevereiro',
-                                '03' => 'Março',
-                                '04' => 'Abril',
-                                '05' => 'Maio',
-                                '06' => 'Junho',
-                                '07' => 'Julho',
-                                '08' => 'Agosto',
-                                '09' => 'Setembro',
-                                '10' => 'Outubro',
-                                '11' => 'Novembro',
-                                '12' => 'Dezembro'
-                            ];
-
-                            $dateParts = explode('/', $formated_transaction_date);
-                            $formattedDate = "{$dateParts[0]} de {$months[$dateParts[1]]} de {$dateParts[2]}";
-
-                            $formattedDate;
-
-
-
+                            $transaction = new TransactionViewDTO(
+                                $transaction['value'],
+                                $transaction['category'],
+                                $transaction['date'],
+                                $transaction['description'],
+                                $transaction['type']
+                            );
                             ?>
-                            <tr class='<?php echo $classe ?>'>
+                            <tr class='<?php echo $transaction->type; ?>'>
                                 <td class='category-icon'><?php echo $transaction->category; ?> </td>
-                                <td><?php echo "R$ {$formated_value}"; ?> </td>
+                                <td><?php echo "R$ {$transaction->value}"; ?> </td>
                                 <td><?php echo $transaction->description; ?> </td>
-                                <td class='transaction-date'><?php echo $formattedDate; ?> </td>
+                                <td class='transaction-date'><?php echo $transaction->date; ?> </td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
