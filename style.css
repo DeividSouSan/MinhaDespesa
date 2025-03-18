@@ -175,6 +175,19 @@ main {
         scale: 1.1;
 
     }
+
+    .category-icon:hover {
+        width: 10px;
+
+    }
+
+    .category-icon:hover {
+        animation: shake 500ms alternate-reverse;
+    }
+
+    .transaction-date {
+        text-transform: none;
+    }
 }
 
 .transaction-line {

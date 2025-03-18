@@ -32,6 +32,22 @@ try {
     echo 'Não foi possível conectar ao banco de dados.';
 }
 
+enum CategoryIcon: string
+{
+    case Salario = '💰';
+    case RendaExtra = '🤑';
+    case RendaPassiva = '📈';
+    case Moradia = '🏠';
+    case Alimentacao = '🥪';
+    case Transporte = '🚌';
+    case Viagens = '✈';
+    case Saude = '🏥';
+    case Educacao = '🎓';
+    case Compras = '🛍';
+    case Vestuario = '👕';
+    case Lazer = '🧘‍♂️';
+}
+
 // Entities
 class TransactionDTO
 {
@@ -155,26 +171,26 @@ $transactionRepository = new TransactionRepository($db);
 
                 <?php if (isset($_GET['type']) && $_GET['type'] == 'receita'): ?>
                     <section class='field-wrapper'>
-                        <label for=" category">🗃 Categoria</label>
+                        <label for="category">🗃 Categoria</label>
                         <select name="category" id="category">
-                            <option value="salario">💰 Salário</option>
-                            <option value="renda-extra">🤑 Renda Extra</option>
-                            <option value="renda-passiva">📈 Renda Passiva</option>
+                            <option value="<?php echo CategoryIcon::Salario->value; ?>">💰 Salário</option>
+                            <option value="<?php echo CategoryIcon::RendaExtra->value; ?>">🤑 Renda Extra</option>
+                            <option value="<?php echo CategoryIcon::RendaPassiva->value; ?>">📈 Renda Passiva</option>
                         </select>
                     </section>
                 <?php else: ?>
                     <section class='field-wrapper'>
                         <label for=" category">🗃 Categoria</label>
                         <select name="category" id="category">
-                            <option value="moradia">🏠Moradia</option>
-                            <option value="alimentacao">🥪Alimentação</option>
-                            <option value="transporte">🚌Transporte</option>
-                            <option value="viagens">✈Viagens</option>
-                            <option value="saude">🏥Saúde</option>
-                            <option value="educacao">🎓Educação</option>
-                            <option value="compras">🛍Compras</option>
-                            <option value="vestuario">👕Vestuário</option>
-                            <option value="lazer">🧘‍♂️Lazer</option>
+                            <option value="<?php echo CategoryIcon::Moradia->value; ?>">🏠Moradia</option>
+                            <option value="<?php echo CategoryIcon::Alimentacao->value; ?>">🥪Alimentação</option>
+                            <option value="<?php echo CategoryIcon::Transporte->value; ?>">🚌Transporte</option>
+                            <option value="<?php echo CategoryIcon::Viagens->value; ?>">✈Viagens</option>
+                            <option value="<?php echo CategoryIcon::Saude->value; ?>">🏥Saúde</option>
+                            <option value="<?php echo CategoryIcon::Educacao->value; ?>">🎓Educação</option>
+                            <option value="<?php echo CategoryIcon::Compras->value; ?>">🛍Compras</option>
+                            <option value="<?php echo CategoryIcon::Vestuario->value; ?>">👕Vestuário</option>
+                            <option value="<?php echo CategoryIcon::Lazer->value; ?>">🧘‍♂️Lazer</option>
                         </select>
                     </section>
                 <?php endif ?>
@@ -202,6 +218,7 @@ $transactionRepository = new TransactionRepository($db);
             if (isset($_POST['value']) && isset($_POST['category']) && isset($_POST['date']) && isset($_POST['description'])) {
                 $value = $_POST['value'];
                 $category = $_POST['category'];
+                var_dump($category);
                 $date = $_POST['date'];
                 $description = $_POST['description'];
                 $type = (isset($_POST['type']) ? $_POST['type'] : 'despesa');
@@ -217,9 +234,8 @@ $transactionRepository = new TransactionRepository($db);
                 <table>
                     <thead>
                         <tr>
-                            <th>Tipo</th>
+                            <th>Cat</th>
                             <th>Valor</th>
-                            <th>Categoria</th>
                             <th>Descrição</th>
                             <th>Data</th>
                         </tr>
@@ -232,13 +248,34 @@ $transactionRepository = new TransactionRepository($db);
                             $formated_value = number_format($transaction->value, 2, ',', '.');
                             $formated_transaction_date = ($transaction->date)->format('d/m/Y');
 
+                            $months = [
+                                '01' => 'Janeiro',
+                                '02' => 'Fevereiro',
+                                '03' => 'Março',
+                                '04' => 'Abril',
+                                '05' => 'Maio',
+                                '06' => 'Junho',
+                                '07' => 'Julho',
+                                '08' => 'Agosto',
+                                '09' => 'Setembro',
+                                '10' => 'Outubro',
+                                '11' => 'Novembro',
+                                '12' => 'Dezembro'
+                            ];
+
+                            $dateParts = explode('/', $formated_transaction_date);
+                            $formattedDate = "{$dateParts[0]} de {$months[$dateParts[1]]} de {$dateParts[2]}";
+
+                            $formattedDate;
+
+
+
                             ?>
                             <tr class='<?php echo $classe ?>'>
-                                <td><?php echo $transaction->type; ?></td>
+                                <td class='category-icon'><?php echo $transaction->category; ?> </td>
                                 <td><?php echo "R$ {$formated_value}"; ?> </td>
-                                <td><?php echo $transaction->category; ?> </td>
                                 <td><?php echo $transaction->description; ?> </td>
-                                <td><?php echo $formated_transaction_date; ?> </td>
+                                <td class='transaction-date'><?php echo $formattedDate; ?> </td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
