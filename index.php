@@ -93,7 +93,7 @@ class TransactionViewDTO
     public function format_type(string $type, string $date): string
     {
         if ($type == "despesa") {
-            $transaction_date = $date;
+            $transaction_date = new DateTime($date);
             $current_date = new DateTime(date('Y-m-d', time()));
 
             return ($transaction_date > $current_date) ? "despesa-futura" : "despesa";
