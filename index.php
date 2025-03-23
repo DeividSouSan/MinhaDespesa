@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 define('DATABASE_HOST', 'mysql-database');
 define('DATABASE_PORT', 3306);
 define('DATABASE_NAME', 'local_db');
@@ -179,6 +181,7 @@ class TransactionRepository
 }
 
 $transactionRepository = new TransactionRepository($db);
+
 ?>
 
 <!DOCTYPE html>
@@ -262,7 +265,10 @@ $transactionRepository = new TransactionRepository($db);
     <main>
         <?php
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-            if (isset($_POST['value']) && isset($_POST['category']) && isset($_POST['date']) && isset($_POST['description'])) {
+            if (empty($_POST['value']) || empty($_POST['category']) || empty($_POST['date']) || empty($_POST['description'])) {
+                $_SESSION['missing-value'] = true;
+            } else {
+                $_SESSION['missing-value'] = false;
                 $value = $_POST['value'];
                 $category = $_POST['category'];
                 $date = $_POST['date'];
@@ -274,6 +280,13 @@ $transactionRepository = new TransactionRepository($db);
             }
         }
         ?>
+
+        <?php if (isset($_SESSION['missing-value']) && $_SESSION['missing-value']): ?>
+            <section>
+                faltando valores!!!
+            </section>
+        <?php endif ?>
+
         <section class="transactions-wrapper">
             <?php if ($transactionRepository->read()): ?>
                 <table>
