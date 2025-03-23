@@ -67,7 +67,7 @@ class TransactionDTO
     }
 }
 
-class TransactionViewDTO
+class TransactionPresenter
 {
     public $value;
     public $category;
@@ -288,7 +288,7 @@ $transactionRepository = new TransactionRepository($db);
                     <tbody>
                         <?php foreach ($transactionRepository->read() as $transaction): ?>
                             <?php
-                            $transaction = new TransactionViewDTO(
+                            $transaction = new TransactionPresenter(
                                 $transaction['value'],
                                 $transaction['category'],
                                 $transaction['date'],
