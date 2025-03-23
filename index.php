@@ -59,13 +59,13 @@ class TransactionDTO
     public $description;
     public $type;
 
-    function __construct(string $value, string $category, string $date, string $description, string $type)
+    function __construct(array $array)
     {
-        $this->value = (float) $value;
-        $this->category = $category;
-        $this->date = new DateTime($date);
-        $this->description = $description;
-        $this->type = $type;
+        $this->value = $array['value'];
+        $this->category = $array['category'];
+        $this->date = new DateTime($array['date']);
+        $this->description = $array['description'];
+        $this->type = $array['type'];
     }
 }
 
@@ -205,14 +205,14 @@ $transactionRepository = new TransactionRepository($db);
                 <section class='field-wrapper'>
                     <label for="type">Tipo (📤/📥)</label>
                     <select name="type" id="type" onchange="this.form.submit()">
-                        <option value=" despesa" <?php echo (!isset($_GET['type']) || $_GET['type'] == 'despesa') ? 'selected' : ''; ?>>🔴Despesa</option>
-                        <option value="receita" <?php echo (isset($_GET['type']) && $_GET['type'] == 'receita') ? 'selected' : ''; ?>>🟢Receita</option>
+                        <option value=" despesa" <?php echo !isset($_GET['type']) || $_GET['type'] == 'despesa' ? 'selected' : ''; ?>>🔴Despesa</option>
+                        <option value="receita" <?php echo isset($_GET['type']) && $_GET['type'] == 'receita' ? 'selected' : ''; ?>>🟢Receita</option>
                     </select>
                 </section>
             </form>
 
             <form action="index.php" method='POST'>
-                <input type="hidden" name="type" id='type' value=<?php echo (isset($_GET['type'])) ? $_GET['type'] : 'despesa'; ?>>
+                <input type="hidden" name="type" id='type' value=<?php echo isset($_GET['type']) ? $_GET['type'] : 'despesa'; ?>>
 
                 <section class='field-wrapper'>
                     <label for="value">💵 Valor (R$) </label>
@@ -270,13 +270,7 @@ $transactionRepository = new TransactionRepository($db);
             } else {
                 $_SESSION['missing-value'] = false;
 
-                $transaction = new TransactionDTO(
-                    $_POST['value'],
-                    $_POST['category'],
-                    $_POST['date'],
-                    $_POST['description'],
-                    $_POST['type']
-                );
+                $transaction = new TransactionDTO($_POST);
 
                 $transactionRepository->add($transaction);
             }
