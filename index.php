@@ -269,13 +269,15 @@ $transactionRepository = new TransactionRepository($db);
                 $_SESSION['missing-value'] = true;
             } else {
                 $_SESSION['missing-value'] = false;
-                $value = $_POST['value'];
-                $category = $_POST['category'];
-                $date = $_POST['date'];
-                $description = $_POST['description'];
-                $type = (isset($_POST['type']) ? $_POST['type'] : 'despesa');
 
-                $transaction = new TransactionDTO($value, $category, $date, $description, $type);
+                $transaction = new TransactionDTO(
+                    $_POST['value'],
+                    $_POST['category'],
+                    $_POST['date'],
+                    $_POST['description'],
+                    $_POST['type']
+                );
+
                 $transactionRepository->add($transaction);
             }
         }
