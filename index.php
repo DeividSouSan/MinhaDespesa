@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 define('DATABASE_HOST', 'mysql-database');
 define('DATABASE_PORT', 3306);
 define('DATABASE_NAME', 'local_db');
@@ -57,13 +59,13 @@ class TransactionDTO
     public $description;
     public $type;
 
-    function __construct(string $value, string $category, string $date, string $description, string $type)
+    function __construct(array $array)
     {
-        $this->value = (float) $value;
-        $this->category = $category;
-        $this->date = new DateTime($date);
-        $this->description = $description;
-        $this->type = $type;
+        $this->value = $array['value'];
+        $this->category = $array['category'];
+        $this->date = new DateTime($array['date']);
+        $this->description = $array['description'];
+        $this->type = $array['type'];
     }
 }
 
@@ -179,6 +181,7 @@ class TransactionRepository
 }
 
 $transactionRepository = new TransactionRepository($db);
+
 ?>
 
 <!DOCTYPE html>
@@ -202,14 +205,14 @@ $transactionRepository = new TransactionRepository($db);
                 <section class='field-wrapper'>
                     <label for="type">Tipo (📤/📥)</label>
                     <select name="type" id="type" onchange="this.form.submit()">
-                        <option value=" despesa" <?php echo (!isset($_GET['type']) || $_GET['type'] == 'despesa') ? 'selected' : ''; ?>>🔴Despesa</option>
-                        <option value="receita" <?php echo (isset($_GET['type']) && $_GET['type'] == 'receita') ? 'selected' : ''; ?>>🟢Receita</option>
+                        <option value=" despesa" <?php echo !isset($_GET['type']) || $_GET['type'] == 'despesa' ? 'selected' : ''; ?>>🔴Despesa</option>
+                        <option value="receita" <?php echo isset($_GET['type']) && $_GET['type'] == 'receita' ? 'selected' : ''; ?>>🟢Receita</option>
                     </select>
                 </section>
             </form>
 
             <form action="index.php" method='POST'>
-                <input type="hidden" name="type" id='type' value=<?php echo (isset($_GET['type'])) ? $_GET['type'] : 'despesa'; ?>>
+                <input type="hidden" name="type" id='type' value=<?php echo isset($_GET['type']) ? $_GET['type'] : 'despesa'; ?>>
 
                 <section class='field-wrapper'>
                     <label for="value">💵 Valor (R$) </label>
@@ -262,18 +265,24 @@ $transactionRepository = new TransactionRepository($db);
     <main>
         <?php
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
-            if (isset($_POST['value']) && isset($_POST['category']) && isset($_POST['date']) && isset($_POST['description'])) {
-                $value = $_POST['value'];
-                $category = $_POST['category'];
-                $date = $_POST['date'];
-                $description = $_POST['description'];
-                $type = (isset($_POST['type']) ? $_POST['type'] : 'despesa');
+            if (empty($_POST['value']) || empty($_POST['category']) || empty($_POST['date']) || empty($_POST['description'])) {
+                $_SESSION['missing-value'] = true;
+            } else {
+                $_SESSION['missing-value'] = false;
 
-                $transaction = new TransactionDTO($value, $category, $date, $description, $type);
+                $transaction = new TransactionDTO($_POST);
+
                 $transactionRepository->add($transaction);
             }
         }
         ?>
+
+        <?php if (isset($_SESSION['missing-value']) && $_SESSION['missing-value']): ?>
+            <section>
+                faltando valores!!!
+            </section>
+        <?php endif ?>
+
         <section class="transactions-wrapper">
             <?php if ($transactionRepository->read()): ?>
                 <table>
