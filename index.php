@@ -200,6 +200,10 @@ $transactionRepository = new TransactionRepository($db);
             <img src="" alt="">
         </div>
 
+
+    </header>
+
+    <main>
         <section class="form-wrapper">
             <form action="index.php" method='GET'>
                 <section class='field-wrapper'>
@@ -260,9 +264,6 @@ $transactionRepository = new TransactionRepository($db);
                 </section>
             </form>
         </section>
-    </header>
-
-    <main>
         <?php
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             if (empty($_POST['value']) || empty($_POST['category']) || empty($_POST['date']) || empty($_POST['description'])) {
