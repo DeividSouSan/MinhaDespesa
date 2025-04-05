@@ -1,12 +1,10 @@
 services:
   php:
-    image: php:8.2-apache
-    container_name: my-php-app
+    build: .
     ports:
-      - 8080:80
+      - "8080:80"
     volumes:
       - .:/var/www/html
-    command: bash -c "apt-get update && apt-get install -y libpng-dev && docker-php-ext-install mysqli && apache2-foreground"
   mysql:
     image: mysql:9.1.0
     container_name: mysql-database
