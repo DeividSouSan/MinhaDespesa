@@ -1,0 +1,17 @@
+@import './styles/_reset.css';
+@import './styles/_variables.css';
+@import './styles/_global.css';
+
+@import './styles/_header.css';
+@import './styles/_app-logo.css';
+
+@import './styles/_main.css';
+@import './styles/_table.css';
+
+@import './styles/_form.css';
+@import './styles/_transaction-line.css';
+@import './styles/_footer.css';
+
+@import './styles/_animations.css';
+
+@import './styles/_v.form.css'
