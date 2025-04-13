@@ -5,6 +5,7 @@ if (!defined('DATABASE_NAME')) define('DATABASE_NAME', 'local_db');
 if (!defined('DATABASE_USER')) define('DATABASE_USER', 'local_user');
 if (!defined('DATABASE_PASSWORD')) define('DATABASE_PASSWORD', 'local_password');
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
     $db = mysqli_connect(
