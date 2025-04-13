@@ -27,7 +27,19 @@ description TEXT,
 type ENUM('despesa', 'receita') NOT NULL
 );");
 
+    $create_user_table_query = $db->prepare("
+CREATE TABLE IF NOT EXISTS User
+(
+id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(255) NOT NULL UNIQUE,
+email VARCHAR(255) NOT NULL UNIQUE,
+password_hash VARCHAR(255) NOT NULL,
+active BOOLEAN NOT NULL DEFAULT FALSE
+);");
+
     $create_transactions_table_query->execute();
-} catch (mysqli_sql_exception) {
+    $create_user_table_query->execute();
+} catch (mysqli_sql_exception $err) {
+    echo $err->getMessage();
     echo 'Não foi possível conectar ao banco de dados.';
 }
