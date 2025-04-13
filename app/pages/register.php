@@ -1,5 +1,7 @@
 <?php
 
+require '../app/infra/user_repository.php';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -9,7 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $missing_data = (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['password-confirmation']));
 
     if (!$missing_data) {
-        echo 'Informações salvas no bd!!!';
+        $user_repository = new UserRepository();
+
+        $user = new UserDTO($_POST);
+
+        $user_repository->add($user);
     }
 }
 ?>
