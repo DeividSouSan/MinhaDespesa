@@ -43,3 +43,5 @@ active BOOLEAN NOT NULL DEFAULT FALSE
     echo $err->getMessage();
     echo 'Não foi possível conectar ao banco de dados.';
 }
+
+return $db ?? null;
