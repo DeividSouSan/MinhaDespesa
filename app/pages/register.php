@@ -28,20 +28,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registre-se</title>
     <link rel="stylesheet" href="main.css">
-
 </head>
 
 <body>
     <main>
-        <?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && $missing_data): ?>
-            <section>
-                Informações estão faltando.
-            </section>
+        <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
+            <?php if ($missing_data): ?>
+                <section class='error-section'>
+                    Informações estão faltando.
+                </section>
+            <?php else: ?>
+                <section class='success-section'>
+                    E-mail de confirmação enviado para <strong><?php echo $_POST['email'] ?></strong>
+                </section>
+            <?php endif ?>
         <?php endif ?>
+
         <section class="auth-form-wrapper">
             <form action="/register" method="POST">
                 <h1>Registre-se</h1>
-                <section class='field-wrapper'>
+                <section class=' field-wrapper'>
                     <label for="username" class="username">Nome de Usuário</label>
                     <input type="text" name="username" placeholder="Fulano Alguém">
                 </section>
