@@ -1,13 +1,12 @@
 <?php
-define('DATABASE_HOST', 'mysql-database');
-define('DATABASE_PORT', 3306);
-define('DATABASE_NAME', 'local_db');
-define('DATABASE_USER', 'local_user');
-define('DATABASE_PASSWORD', 'local_password');
+if (!defined('DATABASE_HOST')) define('DATABASE_HOST', 'mysql-database');
+if (!defined('DATABASE_PORT')) define('DATABASE_PORT', 3306);
+if (!defined('DATABASE_NAME')) define('DATABASE_NAME', 'local_db');
+if (!defined('DATABASE_USER')) define('DATABASE_USER', 'local_user');
+if (!defined('DATABASE_PASSWORD')) define('DATABASE_PASSWORD', 'local_password');
+
 
 try {
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
     $db = mysqli_connect(
         DATABASE_HOST,
         DATABASE_USER,
