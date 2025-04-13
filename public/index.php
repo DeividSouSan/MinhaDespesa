@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require '../app/infra/database.php';
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 match ($path) {
