@@ -1,10 +1,10 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'] || '';
-    $email = $_POST['email'] || '';
-    $password = $_POST['password'] || '';
-    $password_confirmation = $_POST['password-confirmation'] || '';
+    $username = $_POST['username'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $password_confirmation = $_POST['password-confirmation'] ?? '';
 
     $missing_data = (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['password-confirmation']));
 
