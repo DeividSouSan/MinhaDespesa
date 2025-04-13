@@ -1,0 +1,21 @@
+.error-section {
+    background-color: rgb(242, 181, 181);
+    border: 1px solid rgb(125, 54, 54);
+    padding: 1rem 1rem;
+    border-radius: 0.25rem;
+    width: 50%;
+    text-align: center;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.477);
+    translate: 0 -10px;
+}
+
+.success-section {
+    background-color: rgb(198, 242, 181);
+    border: 1px solid rgb(54, 125, 88);
+    padding: 1rem 1rem;
+    border-radius: 0.25rem;
+    width: 50%;
+    text-align: center;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.477);
+    translate: 0 -10px;
+}
