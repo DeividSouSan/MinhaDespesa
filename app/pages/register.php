@@ -3,19 +3,15 @@
 require '../app/infra/user_repository.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $password_confirmation = $_POST['password-confirmation'] ?? '';
 
-    $missing_data = (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['password-confirmation']));
-
-    if (!$missing_data) {
-        $user_repository = new UserRepository();
-
+    try {
         $user = new UserDTO($_POST);
+        $user->validate();
 
+        $user_repository = new UserRepository();
         $user_repository->add($user);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
     }
 }
 ?>
@@ -33,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <main>
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
-            <?php if ($missing_data): ?>
+            <?php if ($error_message): ?>
                 <section class='error-section'>
-                    Informações estão faltando.
+                    <?php echo $error_message ?>
                 </section>
             <?php else: ?>
                 <section class='success-section'>
