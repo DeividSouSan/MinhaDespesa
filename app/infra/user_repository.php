@@ -15,19 +15,15 @@ class UserRepository
     {
         $username = $user->username;
         $email = $user->email;
-        $password_hash = $user->password;
+        $password_hash = password_hash($user->password, PASSWORD_BCRYPT);
 
-        try {
-            $stmt = $this->database->prepare("
-            INSERT INTO User (username, email, password_hash)
-            VALUES (?,?,?);
-            ");
+        $stmt = $this->database->prepare("
+        INSERT INTO User (username, email, password_hash)
+        VALUES (?,?,?);
+        ");
 
-            $stmt->bind_param("sss", $username, $email, $password_hash);
+        $stmt->bind_param("sss", $username, $email, $password_hash);
 
-            $result = $stmt->execute();
-        } catch (Exception $err) {
-            echo $err;
-        }
+        $result = $stmt->execute();
     }
 }
