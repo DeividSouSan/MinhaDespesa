@@ -1,12 +1,21 @@
 <?php
 
 require '../app/infra/user_repository.php';
+require '../app/dto/user_dto.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $uri == '/register') {
     try {
-        $user = new UserDTO($_POST);
-        $user->validate();
+        $user_dto = new UserDTO($_POST);
+        $user_dto->validate();
+
+
+        $user = new User();
+        $user->username = $user_dto->username;
+        $user->email = $user_dto->email;
+        $user->password = password_hash($user_dto->password, PASSWORD_BCRYPT);
+        $user->token = bin2hex(random_bytes(16));
 
         $user_repository = new UserRepository();
 
@@ -23,6 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user_repository->add($user);
     } catch (Exception $e) {
         $error_message = $e->getMessage();
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && $uri == '/register/confirm') {
+    $token = $_GET['token'] ?? '';
+
+    if (empty($token)) {
+        $error_message = 'E-mail ou token inválido';
+    } else {
+        $user_repository = new UserRepository();
+        $user = $user_repository->getByToken($token);
+
+        $user_repository->activate($user);
     }
 }
 ?>
