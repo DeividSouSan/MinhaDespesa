@@ -34,7 +34,7 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 username VARCHAR(255) NOT NULL UNIQUE,
 email VARCHAR(255) NOT NULL UNIQUE,
 password_hash VARCHAR(255) NOT NULL,
-active BOOLEAN NOT NULL DEFAULT FALSE
+token VARCHAR(255) NULL
 );");
 
     $create_transactions_table_query->execute();
