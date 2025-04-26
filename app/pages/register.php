@@ -9,6 +9,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user->validate();
 
         $user_repository = new UserRepository();
+
+        $databse_user = $user_repository->getByUsername($user->username);
+        if ($databse_user) {
+            throw new Exception('Nome de usuário já cadastrado');
+        }
+
+        $databse_user = $user_repository->getByEmail($user->email);
+        if ($databse_user) {
+            throw new Exception('E-mail já cadastrado');
+        }
+
         $user_repository->add($user);
     } catch (Exception $e) {
         $error_message = $e->getMessage();
