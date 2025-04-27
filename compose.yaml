@@ -1,17 +1,16 @@
 services:
   php:
-    image: php:8.2-apache
-    container_name: my-php-app
+    build: .
     ports:
-      - 8080:80
+      - "8080:80"
     volumes:
       - .:/var/www/html
-    command: bash -c "apt-get update && apt-get install -y libpng-dev && docker-php-ext-install mysqli && apache2-foreground"
+
   mysql:
     image: mysql:9.1.0
     container_name: mysql-database
     ports:
-     - 3306:3306
+      - 3306:3306
     environment:
       MYSQL_HOST: localhost
       MYSQL_PORT: 3306
@@ -19,3 +18,11 @@ services:
       MYSQL_USER: local_user
       MYSQL_PASSWORD: local_password
       MYSQL_ROOT_PASSWORD: local_password
+
+  mailhog:
+      image: mailhog/mailhog:latest
+      container_name: mailhog
+      restart: always
+      ports:
+        - 1025:1025
+        - 8025:8025

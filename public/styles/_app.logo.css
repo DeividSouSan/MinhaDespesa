@@ -1,0 +1,14 @@
+.app-logo {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3rem;
+    font-weight: 200;
+    letter-spacing: 0.2rem;
+    background-color: #E9E9E9;
+    color: #333;
+    display: inline-block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 0.2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
