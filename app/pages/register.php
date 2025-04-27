@@ -30,6 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $uri == '/register') {
         }
 
         $user_repository->add($user);
+
+        $to = $user->email;
+        $subject = 'Confirmação de registro';
+        $message = 'Clique no link para confirmar seu registro: ' .
+            'http://localhost:8080/register/confirm?token=' . $user->token;
+        $headers = 'From: test@dominio.com' . "\r\n" .
+            'Reply-To: test@dominio.com' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+        if (mail($to, $subject, $message, $headers)) {
+            echo "E-mail enviado com sucesso!";
+        } else {
+            echo "Falha no envio do e-mail.";
+        }
     } catch (Exception $e) {
         $error_message = $e->getMessage();
     }
@@ -39,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $uri == '/register/confirm') {
     $token = $_GET['token'] ?? '';
 
     if (empty($token)) {
-        $error_message = 'E-mail ou token inválido';
+        $error_message = 'Token inválido';
     } else {
         $user_repository = new UserRepository();
         $user = $user_repository->getByToken($token);
