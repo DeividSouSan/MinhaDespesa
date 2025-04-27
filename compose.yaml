@@ -5,11 +5,12 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
+
   mysql:
     image: mysql:9.1.0
     container_name: mysql-database
     ports:
-     - 3306:3306
+      - 3306:3306
     environment:
       MYSQL_HOST: localhost
       MYSQL_PORT: 3306
@@ -17,3 +18,11 @@ services:
       MYSQL_USER: local_user
       MYSQL_PASSWORD: local_password
       MYSQL_ROOT_PASSWORD: local_password
+
+  mailhog:
+      image: mailhog/mailhog:latest
+      container_name: mailhog
+      restart: always
+      ports:
+        - 1025:1025
+        - 8025:8025
