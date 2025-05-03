@@ -1,64 +1,22 @@
 <?php
 
 require '../app/infra/user_repository.php';
-require '../app/dto/user_dto.php';
+require '../app/dto/create_user_dto.php';
+require '../app/services/user_services.php';
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $uri == '/register') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        $user_dto = new UserDTO($_POST);
-        $user_dto->validate();
 
+        $dto = new CreateUserDTO($_POST);
 
-        $user = new User();
-        $user->username = $user_dto->username;
-        $user->email = $user_dto->email;
-        $user->password = password_hash($user_dto->password, PASSWORD_BCRYPT);
-        $user->token = bin2hex(random_bytes(16));
+        $repository = new UserRepository();
+        $mailer = new MailerService();
 
-        $user_repository = new UserRepository();
-
-        $databse_user = $user_repository->getByUsername($user->username);
-        if ($databse_user) {
-            throw new Exception('Nome de usuário já cadastrado');
-        }
-
-        $databse_user = $user_repository->getByEmail($user->email);
-        if ($databse_user) {
-            throw new Exception('E-mail já cadastrado');
-        }
-
-        $user_repository->add($user);
-
-        $to = $user->email;
-        $subject = 'Confirmação de registro';
-        $message = 'Clique no link para confirmar seu registro: ' .
-            'http://localhost:8080/register/confirm?token=' . $user->token;
-        $headers = 'From: test@dominio.com' . "\r\n" .
-            'Reply-To: test@dominio.com' . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
-
-        if (mail($to, $subject, $message, $headers)) {
-            echo "E-mail enviado com sucesso!";
-        } else {
-            echo "Falha no envio do e-mail.";
-        }
-    } catch (Exception $e) {
-        $error_message = $e->getMessage();
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && $uri == '/register/confirm') {
-    $token = $_GET['token'] ?? '';
-
-    if (empty($token)) {
-        $error_message = 'Token inválido';
-    } else {
-        $user_repository = new UserRepository();
-        $user = $user_repository->getByToken($token);
-
-        $user_repository->activate($user);
+        $service = new UserService($repository, $mailer);
+        $user = $service->createFromDTO($dto);
+        $service->register($user);
+    } catch (Exception $error) {
+        $error_message = $error->getMessage();
     }
 }
 ?>
@@ -76,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $uri == '/register/confirm') {
 <body>
     <main>
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
-            <?php if ($error_message): ?>
+            <?php if (isset($error_message)): ?>
                 <section class='error-section'>
                     <?php echo $error_message ?>
                 </section>
@@ -92,19 +50,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $uri == '/register/confirm') {
                 <h1>Registre-se</h1>
                 <section class=' field-wrapper'>
                     <label for="username" class="username">Nome de Usuário</label>
-                    <input type="text" name="username" placeholder="Fulano Alguém">
+                    <div>
+                        <span>👤</span>
+                        <input type="text" name="username" placeholder="Fulano Alguém">
+                    </div>
                 </section>
                 <section class='field-wrapper'>
                     <label for="email" class='email'>E-mail</label>
-                    <input type="email" name="email" placeholder="fulano@provedor.com">
+                    <div>
+                        <span>📧</span>
+                        <input type="email" name="email" placeholder="fulano@provedor.com">
+                    </div>
                 </section>
                 <section class='field-wrapper'>
                     <label for="password" class='password'>Senha</label>
-                    <input type="password" name="password" placeholder="Digite uma senha forte.">
+                    <div>
+                        <span>🔑</span>
+                        <input type="password" name="password" placeholder="Digite uma senha forte.">
+                    </div>
                 </section>
                 <section class='field-wrapper'>
                     <label for="password-confirmation" class='password-confirmation'>Confirme a senha</label>
-                    <input type="password" name="password-confirmation" placeholder="Digite a senha novamente.">
+                    <div>
+                        <span>🔐</span>
+                        <input type="password" name="password-confirmation" placeholder="Digite a senha novamente.">
+                    </div>
                 </section>
 
                 <section class="field-wrapper"><input type="submit" value="Registrar-se"></section>

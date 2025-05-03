@@ -2,7 +2,7 @@
 
 require '../app/infra/user.php';
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
     private mysqli $database;
 
@@ -11,7 +11,7 @@ class UserRepository
         $this->database = require '../app/infra/database.php';
     }
 
-    function add(User $user)
+    function add(User $user): void
     {
         $username = $user->username;
         $email = $user->email;
@@ -28,7 +28,7 @@ class UserRepository
         $result = $stmt->execute();
     }
 
-    function getByEmail(string $email)
+    function getByEmail(string $email): User | null
     {
         $stmt = $this->database->prepare("
         SELECT * FROM User WHERE email = ?;
@@ -41,7 +41,7 @@ class UserRepository
         return $stmt->get_result()->fetch_assoc();
     }
 
-    function getByUsername(string $username)
+    function getByUsername(string $username): User | null
     {
         $stmt = $this->database->prepare("
         SELECT * FROM User WHERE username = ?;
@@ -54,7 +54,7 @@ class UserRepository
         return $stmt->get_result()->fetch_assoc();
     }
 
-    function getByToken(string $token): User
+    function getByToken(string $token): User|null
     {
         $stmt = $this->database->prepare("
         SELECT * FROM User WHERE token = ?;
@@ -65,17 +65,21 @@ class UserRepository
         $stmt->execute();
 
         $row = $stmt->get_result()->fetch_assoc();
-        $user = new User();
 
-        $user->username = $row['username'];
-        $user->email = $row['email'];
-        $user->password = $row['password_hash'];
-        $user->token = $row['token'];
+        if ($row) {
+            $user = new User();
+            $user->username = $row['username'];
+            $user->email = $row['email'];
+            $user->password = $row['password_hash'];
+            $user->token = $row['token'];
+        } else {
+            $user = null;
+        }
 
         return $user;
     }
 
-    function activate(User $user)
+    function activate(User $user): void
     {
         $stmt = $this->database->prepare("
         UPDATE User SET token = NULL WHERE token = ?;
