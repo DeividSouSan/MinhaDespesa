@@ -3,9 +3,7 @@
 require '../app/infra/user_repository.php';
 require '../app/dto/user_dto.php';
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $uri == '/register') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $user_dto = new UserDTO($_POST);
         $user_dto->validate();
@@ -49,18 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $uri == '/register') {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && $uri == '/register/confirm') {
-    $token = $_GET['token'] ?? '';
 
-    if (empty($token)) {
-        $error_message = 'Token inválido';
-    } else {
-        $user_repository = new UserRepository();
-        $user = $user_repository->getByToken($token);
-
-        $user_repository->activate($user);
-    }
-}
 ?>
 
 <!DOCTYPE html>
