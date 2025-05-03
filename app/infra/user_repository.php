@@ -54,7 +54,7 @@ class UserRepository
         return $stmt->get_result()->fetch_assoc();
     }
 
-    function getByToken(string $token): User
+    function getByToken(string $token): User|null
     {
         $stmt = $this->database->prepare("
         SELECT * FROM User WHERE token = ?;
@@ -65,12 +65,16 @@ class UserRepository
         $stmt->execute();
 
         $row = $stmt->get_result()->fetch_assoc();
-        $user = new User();
 
-        $user->username = $row['username'];
-        $user->email = $row['email'];
-        $user->password = $row['password_hash'];
-        $user->token = $row['token'];
+        if ($row) {
+            $user = new User();
+            $user->username = $row['username'];
+            $user->email = $row['email'];
+            $user->password = $row['password_hash'];
+            $user->token = $row['token'];
+        } else {
+            $user = null;
+        }
 
         return $user;
     }
