@@ -1,9 +1,9 @@
 <?php
-class UserDTO
+class CreateUserDTO
 {
-    public $username;
-    public $email;
-    public $password;
+    public string  $username;
+    public string  $email;
+    public string  $password;
 
     function __construct(array $array)
     {
@@ -20,9 +20,19 @@ class UserDTO
         $this->username = $array['username'];
         $this->email = $array['email'];
         $this->password = $array['password'];
+
+        $this->validate();
     }
 
-    function validate()
+    /**
+     *  Valida os dados do DTO.
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+
+    function validate(): void
     {
         if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) throw new Exception('Formato de e-mail inválido');
         if (strlen($this->email) < 5) throw new Exception('O e-mail deve ter no mínimo 5 caracteres');
