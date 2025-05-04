@@ -3,6 +3,7 @@
 require '../app/infra/user_repository.php';
 require '../app/dto/create_user_dto.php';
 require '../app/services/user_service.php';
+require '../app/services/mailer_service.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
