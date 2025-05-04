@@ -1,3 +1,50 @@
+<?php
+
+require "../app/infra/user_repository.php";
+
+class EmailNotFound extends Exception
+{
+    public function __construct(string $message = '', int $code = 404)
+    {
+        parent::__construct($message, $code);
+        $this->message = "O e-mail inserido não pertence a um usuário";
+        $this->code = $code;
+    }
+};
+
+
+class PasswordIncorrect extends Exception
+{
+    public function __construct(string $message = '', int $code = 404)
+    {
+        parent::__construct($message, $code);
+        $this->message = "A senha inserida está errada";
+        $this->code = $code;
+    }
+};
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    try {
+
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $repository = new UserRepository();
+        $db_user = $repository->getByEmail($email);
+
+        if (!$db_user) throw new EmailNotFound();
+
+        $match_password = password_verify($password, $db_user->password);
+        if (!$match_password) throw new PasswordIncorrect();
+
+        die("Credenciais corretas, login feito com sucesso!");
+    } catch (Exception $error) {
+        $error_message = $error->getMessage();
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
