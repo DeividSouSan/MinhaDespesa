@@ -1,6 +1,7 @@
 <?php
 
 require '../app/infra/user.php';
+require '../app/infra/user_repository_interface.php';
 
 class UserRepository implements UserRepositoryInterface
 {
