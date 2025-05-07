@@ -1,4 +1,9 @@
 <?php
+
+require '../app/infra/transaction_repository.php';
+require '../app/dto/transaction_dto.php';
+require '../app/presenters/transaction_presenter.php';
+
 enum CategoryIcon: string
 {
     case Salario = '💰';
@@ -14,94 +19,92 @@ enum CategoryIcon: string
     case Vestuario = '👕';
     case Lazer = '🧘‍♂️';
 }
+
+$transactionRepository = new TransactionRepository();
+
 ?>
 
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MinhaDespesa</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="shortcut icon"
         href="https://cdn.iconscout.com/icon/free/png-256/free-cash-icon-download-in-svg-png-gif-file-formats--money-currency-dollar-payment-bank-investing-and-finance-pack-business-icons-1746112.png"
         type="image/x-icon">
 </head>
 
-<body>
-    <header>
-        <div>
-            <h1 class="app-logo">Minha🪙Despesa</h1>
-            <img src="" alt="">
-        </div>
-    </header>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+    <main class="w-full max-w-8xl bg-white rounded-xl shadow-lg p-6 flex flex-col md:flex-row gap-6">
 
-    <main>
-        <!-- TELA FINANCAS   -->
-        <section class="form-wrapper">
-            <form action="/financas" method='GET'>
-                <section class='field-wrapper'>
-                    <label for="type">Tipo (📤/📥)</label>
-                    <select name="type" id="type" onchange="this.form.submit()">
-                        <option value=" despesa"
-                            <?php echo !isset($_GET['type']) || $_GET['type'] == 'despesa' ? 'selected' : ''; ?>>
-                            🔴Despesa</option>
-                        <option value="receita"
-                            <?php echo isset($_GET['type']) && $_GET['type'] == 'receita' ? 'selected' : ''; ?>>
-                            🟢Receita</option>
-                    </select>
-                </section>
+        <!-- FORMULÁRIO -->
+        <section class="w-full md:w-1/2 space-y-4">
+            <form action="/finances" method="GET">
+                <label class="block text-sm font-semibold">Tipo (💰/💸)</label>
+                <select name="type" onchange="this.form.submit()"
+                    class="w-full mt-1 rounded-md border border-gray-300 px-3 py-2">
+                    <option value="despesa" <?php echo !isset($_GET['type']) || $_GET['type'] == 'despesa' ? 'selected' : ''; ?>>🔴
+                        Despesa</option>
+                    <option value="receita" <?php echo isset($_GET['type']) && $_GET['type'] == 'receita' ? 'selected' : ''; ?>>🟢
+                        Receita</option>
+                </select>
             </form>
 
-            <form action="/financas" method='POST'>
-                <input type="hidden" name="type" id='type'
-                    value=<?php echo isset($_GET['type']) ? $_GET['type'] : 'despesa'; ?>>
+            <form action="/finances" method="POST" class="space-y-4">
+                <input type="hidden" name="type" value="<?php echo $_GET['type'] ?? 'despesa'; ?>">
 
-                <section class='field-wrapper'>
-                    <label for="value">💵 Valor (R$) </label>
-                    <input type="number" name="value" id="value" placeholder="0,00" step="any">
-                </section>
+                <div>
+                    <label class="block text-sm font-semibold">💵 Valor (R$)</label>
+                    <input type="number" name="value" placeholder="0,00" step="any"
+                        class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300">
+                </div>
 
-                <?php if (isset($_GET['type']) && $_GET['type'] == 'receita'): ?>
-                    <section class='field-wrapper'>
-                        <label for="category">🗃 Categoria</label>
-                        <select name="category" id="category">
+                <div>
+                    <label class="block text-sm font-semibold">📂 Categoria</label>
+                    <select name="category" class="w-full mt-1 rounded-md border border-gray-300 px-3 py-2">
+                        <?php if ($_GET['type'] == 'receita'): ?>
                             <option value="<?php echo CategoryIcon::Salario->value; ?>">💰 Salário</option>
                             <option value="<?php echo CategoryIcon::RendaExtra->value; ?>">🤑 Renda Extra</option>
                             <option value="<?php echo CategoryIcon::RendaPassiva->value; ?>">📈 Renda Passiva</option>
-                        </select>
-                    </section>
-                <?php else: ?>
-                    <section class='field-wrapper'>
-                        <label for=" category">🗃 Categoria</label>
-                        <select name="category" id="category">
-                            <option value="<?php echo CategoryIcon::Moradia->value; ?>">🏠Moradia</option>
-                            <option value="<?php echo CategoryIcon::Alimentacao->value; ?>">🥪Alimentação</option>
-                            <option value="<?php echo CategoryIcon::Transporte->value; ?>">🚌Transporte</option>
-                            <option value="<?php echo CategoryIcon::Viagens->value; ?>">✈Viagens</option>
-                            <option value="<?php echo CategoryIcon::Saude->value; ?>">🏥Saúde</option>
-                            <option value="<?php echo CategoryIcon::Educacao->value; ?>">🎓Educação</option>
-                            <option value="<?php echo CategoryIcon::Compras->value; ?>">🛍Compras</option>
-                            <option value="<?php echo CategoryIcon::Vestuario->value; ?>">👕Vestuário</option>
-                            <option value="<?php echo CategoryIcon::Lazer->value; ?>">🧘‍♂️Lazer</option>
-                        </select>
-                    </section>
-                <?php endif ?>
+                        <?php else: ?>
+                            <option value="<?php echo CategoryIcon::Moradia->value; ?>">🏠 Moradia</option>
+                            <option value="<?php echo CategoryIcon::Alimentacao->value; ?>">🍔 Alimentação</option>
+                            <option value="<?php echo CategoryIcon::Transporte->value; ?>">🚌 Transporte</option>
+                            <option value="<?php echo CategoryIcon::Viagens->value; ?>">✈️ Viagens</option>
+                            <option value="<?php echo CategoryIcon::Saude->value; ?>">🏥 Saúde</option>
+                            <option value="<?php echo CategoryIcon::Educacao->value; ?>">📚 Educação</option>
+                            <option value="<?php echo CategoryIcon::Compras->value; ?>">📦 Compras</option>
+                            <option value="<?php echo CategoryIcon::Vestuario->value; ?>">👕 Vestuário</option>
+                            <option value="<?php echo CategoryIcon::Lazer->value; ?>">🎉 Lazer</option>
+                        <?php endif ?>
+                    </select>
+                </div>
 
-                <section class='field-wrapper'>
-                    <label for="date">🗓 Data</label>
-                    <input type="date" name="date" id="date" placeholder="DD/MM/YYYY">
-                </section>
+                <div>
+                    <label class="block text-sm font-semibold">📅 Data</label>
+                    <input type="date" name="date" class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300">
+                </div>
 
-                <section class='field-wrapper'>
-                    <label for="description">🗒 Descrição</label>
-                    <input type="text" name="description" id="description">
-                </section>
+                <div>
+                    <label class="block text-sm font-semibold">📝 Descrição</label>
+                    <textarea name="description" rows="3"
+                        class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300 resize-none placeholder:text-sm"
+                        placeholder="Adicione detalhes sobre a transação"></textarea>
+                </div>
 
-                <section class="field-wrapper">
-                    <input type="submit" value="Adicionar ➕">
-                </section>
+                <button type="submit"
+                    class="w-full bg-fuchsia-600 text-white py-2 rounded-md font-semibold hover:bg-fuchsia-700 transition">
+                    Adicionar ➕
+                </button>
             </form>
+
+            <?php if (isset($_SESSION['missing-value']) && $_SESSION['missing-value']): ?>
+                <div class="text-red-600 text-sm bg-red-100 p-2 rounded">Faltando valores!!!</div>
+            <?php endif ?>
         </section>
 
         <?php
@@ -118,51 +121,46 @@ enum CategoryIcon: string
         }
         ?>
 
-        <?php if (isset($_SESSION['missing-value']) && $_SESSION['missing-value']): ?>
-            <section>
-                faltando valores!!!
-            </section>
-        <?php endif ?>
-
-        <section class="transactions-wrapper">
-            <?php if ($transactionRepository->read()): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Cat</th>
-                            <th>Valor</th>
-                            <th>Descrição</th>
-                            <th>Data</th>
+        <!-- LISTA DE TRANSAÇÕES -->
+        <section class="w-full md:w-1/2">
+            <table class="w-full text-sm text-left">
+                <thead>
+                    <tr class="text-gray-600 border-b">
+                        <th class="py-2">Cat</th>
+                        <th class="py-2">Valor</th>
+                        <th class="py-2">Descrição</th>
+                        <th class="py-2">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($transactionRepository->read() as $transaction): ?>
+                        <?php
+                        $transaction = new TransactionPresenter(
+                            $transaction['value'],
+                            $transaction['category'],
+                            $transaction['date'],
+                            $transaction['description'],
+                            $transaction['type']
+                        );
+                        $rowClass = $transaction->type === 'receita' ? 'bg-green-50' : 'bg-yellow-50';
+                        ?>
+                        <tr class="<?php echo $rowClass; ?> border-b">
+                            <td class="py-2 px-1"><?php echo $transaction->category; ?></td>
+                            <td class="py-2 px-1 font-semibold text-gray-700">R$ <?php echo $transaction->value; ?></td>
+                            <td class="py-2 px-1 truncate max-w-xs"><?php echo $transaction->description; ?></td>
+                            <td class="py-2 px-1 text-gray-500"><?php echo $transaction->date; ?></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($transactionRepository->read() as $transaction): ?>
-                            <?php
-                            $transaction = new TransactionPresenter(
-                                $transaction['value'],
-                                $transaction['category'],
-                                $transaction['date'],
-                                $transaction['description'],
-                                $transaction['type']
-                            );
-                            ?>
-                            <tr class='<?php echo $transaction->type; ?>'>
-                                <td class='category-icon'><?php echo $transaction->category; ?> </td>
-                                <td><?php echo "R$ {$transaction->value}"; ?> </td>
-                                <td><?php echo $transaction->description; ?> </td>
-                                <td class='transaction-date'><?php echo $transaction->date; ?> </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                Sem transações realizadas;
-            <?php endif ?>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
         </section>
     </main>
 
-    <footer>
-        Projeto Pessoal desenvolvido por <a href="https://github.com/deividsousan">@deividsousan</a>
+    <footer class="text-center text-xs text-gray-500 mt-4">
+        Projeto pessoal desenvolvido por
+        <a href="https://github.com/deividsousan" class="text-indigo-600 hover:text-indigo-500 font-medium">
+            @deividsousan
+        </a>
     </footer>
 </body>
 

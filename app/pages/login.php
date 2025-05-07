@@ -51,13 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - MinhaDespesa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="shortcut icon"
+        href="https://cdn.iconscout.com/icon/free/png-256/free-cash-icon-download-in-svg-png-gif-file-formats--money-currency-dollar-payment-bank-investing-and-finance-pack-business-icons-1746112.png"
+        type="image/x-icon">
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <main class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+    <main class="w-full max-w-md p-6 bg-white rounded-lg shadow-md mb-6">
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
             <?php if (isset($error_message)): ?>
                 <section class="mb-4 p-4 bg-red-100 text-red-700 rounded">
@@ -103,6 +105,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </form>
     </main>
+
+    <footer class="text-center text-sm text-gray-500">
+        Projeto pessoal desenvolvido por
+        <a href="https://github.com/deividsousan" class="text-indigo-600 hover:text-indigo-500 font-medium">
+            @deividsousan
+        </a>
+    </footer>
 </body>
 
 </html>
