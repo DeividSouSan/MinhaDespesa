@@ -5,7 +5,7 @@ class TransactionRepository
 
     function __construct()
     {
-        $this->database = require '../app/infra/database.php';
+        $this->database = require '../app/Infra/Database/database.php';
     }
 
     function read()

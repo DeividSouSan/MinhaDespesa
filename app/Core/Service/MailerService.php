@@ -1,6 +1,6 @@
 <?php
 
-require '../app/services/mailer_service_interface.php';
+require '../app/Core/Repository/MailerService.php';
 
 class MailNotSentException extends Exception
 {

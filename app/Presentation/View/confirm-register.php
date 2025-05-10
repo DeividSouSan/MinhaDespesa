@@ -1,6 +1,6 @@
 <?php
 
-require "../app/infra/user_repository.php";
+require "../app/Infra/Database/UserRepository.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $token = $_GET['token'] ?? '';
@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registre-se</title>
-    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>

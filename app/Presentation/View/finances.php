@@ -1,8 +1,8 @@
 <?php
 
-require '../app/infra/transaction_repository.php';
-require '../app/dto/transaction_dto.php';
-require '../app/presenters/transaction_presenter.php';
+require '../app/Infra/Database/TransactionRepository.php';
+require '../app/Infra/DTO/CreateTransactionDTO.php';
+require '../app/Presentation/Presenter/TransactionPresenter.php';
 
 session_start();
 

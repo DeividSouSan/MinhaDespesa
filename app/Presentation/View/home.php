@@ -20,9 +20,6 @@ if (isset($_SESSION['email'])) {
         href="https://cdn.iconscout.com/icon/free/png-256/free-cash-icon-download-in-svg-png-gif-file-formats--money-currency-dollar-payment-bank-investing-and-finance-pack-business-icons-1746112.png"
         type="image/x-icon">
 
-    <style>
-        /* Você pode adicionar CSS customizado aqui se necessário */
-    </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800 font-sans">

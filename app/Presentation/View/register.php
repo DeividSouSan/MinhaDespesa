@@ -1,9 +1,9 @@
 <?php
 
-require '../app/infra/user_repository.php';
-require '../app/dto/create_user_dto.php';
-require '../app/services/user_service.php';
-require '../app/services/mailer_service.php';
+require '../app/Infra/Database/UserRepository.php';
+require '../app/Infra/DTO/CreateUserDTO.php';
+require '../app/Core/Service/UserService.php';
+require '../app/Core/Service/MailerService.php';
 
 session_start();
 

@@ -1,6 +1,6 @@
 <?php
 
-require "../app/infra/user_repository.php";
+require "../app/Infra/Database/UserRepository.php";
 
 class EmailNotFound extends Exception
 {

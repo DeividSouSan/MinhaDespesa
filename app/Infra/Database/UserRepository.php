@@ -1,7 +1,7 @@
 <?php
 
-require '../app/infra/user.php';
-require '../app/infra/user_repository_interface.php';
+require '../app/Core/Entity/User.php';
+require '../app/Core/Repository/UserRepository.php';
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -9,7 +9,7 @@ class UserRepository implements UserRepositoryInterface
 
     function __construct()
     {
-        $this->database = require '../app/infra/database.php';
+        $this->database = require '../app/Infra/Database/database.php';
     }
 
     function add(User $user): void
