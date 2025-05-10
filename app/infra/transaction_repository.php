@@ -3,9 +3,9 @@ class TransactionRepository
 {
     public mysqli $database;
 
-    function __construct(mysqli $db)
+    function __construct()
     {
-        $this->database = $db;
+        $this->database = require '../app/infra/database.php';
     }
 
     function read()

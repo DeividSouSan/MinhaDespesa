@@ -1,5 +1,7 @@
 <?php
 
+require '../app/services/mailer_service_interface.php';
+
 class MailNotSentException extends Exception
 {
     public function __construct(string $message = '', int $code = 422)

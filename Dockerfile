@@ -13,14 +13,14 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /e
 RUN apt-get update && apt-get install -y libpng-dev && docker-php-ext-install mysqli
 
 # Instala o msmtp
-RUN apt-get install -y msmtp msmtp-mta && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y msmtp
 
 # Cria o arquivo de configuração do msmtp
 COPY msmtprc /etc/msmtprc
-RUN chmod 600 /etc/msmtprc && chown www-data:www-data /etc/msmtprc
+RUN chown www-data:www-data /etc/msmtprc
 
 # Troca o sendmail do PHP para o msmtp
-RUN echo "sendmail_path = /usr/bin/msmtp -C /etc/msmtprc -t" > /usr/local/etc/php/conf.d/msmtp.ini
+RUN echo "sendmail_path = /usr/bin/msmtp -t -i" > /usr/local/etc/php/conf.d/msmtp.ini
 
 # Copia os arquivos do projeto para o container
 COPY . /var/www/html/

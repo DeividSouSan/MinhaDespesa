@@ -29,7 +29,7 @@ class UserRepository implements UserRepositoryInterface
         $result = $stmt->execute();
     }
 
-    function getByEmail(string $email): User | null
+    function getByEmail(string $email): ?User
     {
         $stmt = $this->database->prepare("
         SELECT * FROM User WHERE email = ?;
@@ -39,7 +39,19 @@ class UserRepository implements UserRepositoryInterface
 
         $stmt->execute();
 
-        return $stmt->get_result()->fetch_assoc();
+        $row = $stmt->get_result()->fetch_assoc();
+
+        if ($row) {
+            $user = new User();
+            $user->username = $row['username'];
+            $user->email = $row['email'];
+            $user->password = $row['password_hash'];
+            $user->token = $row['token'];
+        } else {
+            $user = null;
+        }
+
+        return $user;
     }
 
     function getByUsername(string $username): User | null

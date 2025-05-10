@@ -3,6 +3,13 @@
 require '../app/infra/user_repository.php';
 require '../app/dto/create_user_dto.php';
 require '../app/services/user_service.php';
+require '../app/services/mailer_service.php';
+
+session_start();
+
+if (isset($_SESSION['email'])) {
+    header('Location: /finances');
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
@@ -27,17 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registre-se</title>
+    <title>Cadastro - MinhaDespesa</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
-
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registre-se</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon"
+        href="https://cdn.iconscout.com/icon/free/png-256/free-cash-icon-download-in-svg-png-gif-file-formats--money-currency-dollar-payment-bank-investing-and-finance-pack-business-icons-1746112.png"
+        type="image/x-icon">
 </head>
 
 <html lang="en">
