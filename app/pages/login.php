@@ -22,10 +22,15 @@ class PasswordIncorrect extends Exception
         $this->code = $code;
     }
 };
+session_start();
+
+if (isset($_SESSION['email'])) {
+    header('Location: /finances');
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-
         $email = $_POST['email'];
         $password = $_POST['password'];
 
@@ -37,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $match_password = password_verify($password, $db_user->password);
         if (!$match_password) throw new PasswordIncorrect();
 
-        die("Credenciais corretas, login feito com sucesso!");
+        $_SESSION['email'] = $email;
+        header('Location: /finances');
     } catch (Exception $error) {
         $error_message = $error->getMessage();
     }

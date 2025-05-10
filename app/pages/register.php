@@ -5,6 +5,12 @@ require '../app/dto/create_user_dto.php';
 require '../app/services/user_service.php';
 require '../app/services/mailer_service.php';
 
+session_start();
+
+if (isset($_SESSION['email'])) {
+    header('Location: /finances');
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
 

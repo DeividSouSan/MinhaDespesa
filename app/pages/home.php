@@ -1,3 +1,13 @@
+<?php
+
+session_start();
+
+if (isset($_SESSION['email'])) {
+    header('Location: /finances');
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
