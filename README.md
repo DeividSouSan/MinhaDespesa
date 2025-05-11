@@ -60,8 +60,4 @@ Para colocar o **MinhaDespesa** para rodar no seu ambiente local, siga estes pas
     
 ## 📝 Licença
 
-Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes. (Se você não tiver um arquivo LICENSE, é uma boa prática adicionar um).
-
----
-
-Feito  por [DeividSouSan](https://github.com/DeividSouSan) | [LinkedIn](https://www.linkedin.com/in/deividsousan/)
+Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
