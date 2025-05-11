@@ -42,11 +42,7 @@ class UserRepository implements UserRepositoryInterface
         $row = $stmt->get_result()->fetch_assoc();
 
         if ($row) {
-            $user = new User();
-            $user->username = $row['username'];
-            $user->email = $row['email'];
-            $user->password = $row['password_hash'];
-            $user->token = $row['token'];
+            $user = User::fromArray($row);
         } else {
             $user = null;
         }
@@ -80,11 +76,7 @@ class UserRepository implements UserRepositoryInterface
         $row = $stmt->get_result()->fetch_assoc();
 
         if ($row) {
-            $user = new User();
-            $user->username = $row['username'];
-            $user->email = $row['email'];
-            $user->password = $row['password_hash'];
-            $user->token = $row['token'];
+            $user = User::fromArray($row);
         } else {
             $user = null;
         }
