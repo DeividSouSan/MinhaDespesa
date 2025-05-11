@@ -28,73 +28,86 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - MinhaDespesa</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="shortcut icon"
         href="https://cdn.iconscout.com/icon/free/png-256/free-cash-icon-download-in-svg-png-gif-file-formats--money-currency-dollar-payment-bank-investing-and-finance-pack-business-icons-1746112.png"
         type="image/x-icon">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .register-form-container {
+            max-width: 450px;
+            width: 100%;
+        }
+    </style>
 </head>
 
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registre-se</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <main class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+<body>
+    <main class="register-form-container p-4 bg-white rounded-3 shadow-sm">
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
             <?php if (isset($error_message)): ?>
-                <section class="mb-4 p-4 bg-red-100 text-red-700 rounded">
-                    <?php echo $error_message ?>
+                <section class="alert alert-danger p-3 mb-4 rounded alert-dismissible fade show">
+                    <?php echo htmlspecialchars($error_message); ?>
+                    <button type='button' class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </section>
             <?php else: ?>
-                <section class="mb-4 p-4 bg-green-100 text-green-700 rounded">
-                    E-mail de confirmação enviado para <strong><?php echo $_POST['email'] ?></strong>
+                <section class="alert alert-success p-3 mb-4 rounded alert-dismissible show">
+                    E-mail de confirmação enviado para <strong><?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?></strong>
+                    <button type='button' class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </section>
-            <?php endif ?>
-        <?php endif ?>
+            <?php endif; ?>
+        <?php endif; ?>
 
-        <form action="/register" method="POST" class="space-y-5">
-            <h2 class="text-2xl font-bold text-gray-900">Registre-se</h2>
-            <p class="text-sm text-gray-600">Cadastre-se agora para organizar suas finanças!</p>
+        <form action="/register" method="POST">
+            <h2 class="h2 fw-bold text-dark mb-2">Registre-se</h2>
+            <p class="small text-muted mb-4">Cadastre-se agora para organizar suas finanças!</p>
 
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">Nome de Usuário</label>
-                <input type="text" name="username" placeholder="Fulano Alguém"
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500" />
+            <div class="mb-3">
+                <label for="username" class="form-label">Nome de Usuário</label>
+                <input type="text" name="username" id="username" placeholder="Fulano Alguém"
+                    class="form-control" required />
             </div>
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
-                <input type="email" name="email" placeholder="fulano@provedor.com"
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500" />
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" name="email" id="email" placeholder="fulano@provedor.com"
+                    class="form-control" required />
             </div>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
-                <input type="password" name="password" placeholder="Digite uma senha forte."
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500" />
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" name="password" id="password" placeholder="Digite uma senha forte."
+                    class="form-control" required />
             </div>
 
-            <div>
-                <label for="password-confirmation" class="block text-sm font-medium text-gray-700">Confirme a senha</label>
-                <input type="password" name="password-confirmation" placeholder="Digite a senha novamente."
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500" />
+            <div class="mb-3">
+                <label for="password-confirmation" class="form-label">Confirme a senha</label>
+                <input type="password" name="password-confirmation" id="password-confirmation" placeholder="Digite a senha novamente."
+                    class="form-control" required />
             </div>
 
-            <div>
+            <div class="mb-3">
                 <input type="submit" value="Registrar-se"
-                    class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md cursor-pointer transition" />
+                    class="btn btn-primary w-100 py-2 fw-semibold" />
             </div>
-            <div class="text-center text-sm text-gray-600 mt-4">
+            <div class="text-center small text-muted mt-4">
                 Já tem uma conta?
-                <a href="/login" class="text-indigo-600 hover:text-indigo-500 font-medium">Faça login!</a>
+                <a href="/login" class="text-primary fw-medium text-decoration-none">Faça login!</a>
             </div>
         </form>
     </main>
+
+    <!-- Optional: Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 
 </html>
