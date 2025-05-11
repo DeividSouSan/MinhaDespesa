@@ -5,12 +5,6 @@ require '../app/Infra/DTO/CreateUserDTO.php';
 require '../app/Core/Service/UserService.php';
 require '../app/Core/Service/MailerService.php';
 
-session_start();
-
-if (isset($_SESSION['email'])) {
-    header('Location: /finances');
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $dto = CreateUserDTO::fromArray($_POST);

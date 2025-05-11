@@ -22,12 +22,6 @@ class PasswordIncorrect extends Exception
         $this->code = $code;
     }
 };
-session_start();
-
-if (isset($_SESSION['email'])) {
-    header('Location: /finances');
-}
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {

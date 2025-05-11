@@ -21,7 +21,6 @@ class EmailAlreadyExistsException extends Exception
 };
 
 
-
 class UserService
 {
     private UserRepositoryInterface $repository;

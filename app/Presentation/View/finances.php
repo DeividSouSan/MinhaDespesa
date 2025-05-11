@@ -4,12 +4,6 @@ require '../app/Infra/Database/TransactionRepository.php';
 require '../app/Infra/DTO/CreateTransactionDTO.php';
 require '../app/Presentation/Presenter/TransactionPresenter.php';
 
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header('Location: /login');
-}
-
 enum CategoryIcon: string
 {
     case Salario = '💰';
