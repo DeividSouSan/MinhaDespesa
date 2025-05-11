@@ -64,6 +64,7 @@ class UserService
             $dto->username,
             $dto->email,
             password_hash($dto->password, PASSWORD_BCRYPT),
+            null,
             bin2hex(random_bytes(16))
         );
     }
