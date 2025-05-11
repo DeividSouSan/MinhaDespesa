@@ -1,13 +1,14 @@
 <?php
 
 require "../app/Infra/Database/UserRepository.php";
+require "../app/Infra/DTO/LoginUserDTO.php";
 
 class EmailNotFound extends Exception
 {
     public function __construct(string $message = '', int $code = 404)
     {
         parent::__construct($message, $code);
-        $this->message = "O e-mail inserido não pertence a um usuário";
+        $this->message = "E-mail não cadastrado. Crie uma conta.";
         $this->code = $code;
     }
 };
@@ -18,25 +19,24 @@ class PasswordIncorrect extends Exception
     public function __construct(string $message = '', int $code = 404)
     {
         parent::__construct($message, $code);
-        $this->message = "A senha inserida está errada";
+        $this->message = "Senha incorreta";
         $this->code = $code;
     }
 };
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $dto = LoginUserDTO::fromArray($_POST);
 
-        $repository = new UserRepository();
-        $db_user = $repository->getByEmail($email);
+        $repository = new UserRepository(); // se fosse injetado não precisa instanciar toda vez
+        $db_user = $repository->getByEmail($dto->email);
 
-        if (!$db_user) throw new EmailNotFound();
+        if ($db_user == null) throw new EmailNotFound();
 
-        $match_password = password_verify($password, $db_user->password);
+        $match_password = password_verify($dto->password, $db_user->password);
         if (!$match_password) throw new PasswordIncorrect();
 
-        $_SESSION['email'] = $email;
+        $_SESSION['UID'] = $db_user->id;
         header('Location: /finances');
     } catch (Exception $error) {
         $error_message = $error->getMessage();
@@ -52,66 +52,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MinhaDespesa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="shortcut icon"
         href="https://cdn.iconscout.com/icon/free/png-256/free-cash-icon-download-in-svg-png-gif-file-formats--money-currency-dollar-payment-bank-investing-and-finance-pack-business-icons-1746112.png"
         type="image/x-icon">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .login-form-container {
+            max-width: 450px;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
-    <main class="w-full max-w-md p-6 bg-white rounded-lg shadow-md mb-6">
+<body class="p-4">
+    <main class="w-100 login-form-container p-4 bg-white rounded-3 shadow-sm mb-5">
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
             <?php if (isset($error_message)): ?>
-                <section class="mb-4 p-4 bg-red-100 text-red-700 rounded">
-                    <?php echo $error_message ?>
+                <section class="alert alert-danger p-3 mb-4 rounded alert-dismissible fade show" role='alert'>
+                    <?php echo htmlspecialchars($error_message) ?>
+                    <button type='button' class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </section>
             <?php endif ?>
         <?php endif ?>
 
-        <form action="/login" method="POST" class="space-y-5">
-            <h2 class="text-2xl font-bold text-gray-900">Entrar</h2>
-            <p class="text-sm text-gray-600">Acesse sua conta para gerenciar suas finanças.</p>
+        <form action="/login" method="POST">
+            <h2 class="h2 fw-bold text-dark mb-2">Entrar</h2>
+            <p class="small text-muted mb-4">Acesse sua conta para gerenciar suas finanças.</p>
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
-                <input type="email" name="email" placeholder="fulano@provedor.com"
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500" required />
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" name="email" id="email" placeholder="fulano@provedor.com"
+                    class="form-control" required />
             </div>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
-                <input type="password" name="password" placeholder="Digite sua senha"
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500" required />
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" name="password" id="password" placeholder="Digite sua senha"
+                    class="form-control" required />
             </div>
 
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                    <label for="remember" class="ml-2 block text-sm text-gray-700">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="form-check">
+                    <input id="remember" name="remember" type="checkbox" class="form-check-input">
+                    <label for="remember" class="form-check-label small text-secondary">
                         Lembrar-me
                     </label>
                 </div>
-                <a href="/forgot-password" class="text-sm text-indigo-600 hover:text-indigo-500">Esqueceu a senha?</a>
+                <a href="/forgot-password" class="small text-primary text-decoration-none">Esqueceu a senha?</a>
             </div>
 
-            <div>
+            <div class="mb-3">
                 <input type="submit" value="Entrar"
-                    class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md cursor-pointer transition" />
+                    class="btn btn-primary w-100 py-2 fw-semibold" />
             </div>
 
-            <div class="text-center text-sm text-gray-600 mt-4">
+            <div class="text-center small text-muted mt-4">
                 Não tem uma conta?
-                <a href="/register" class="text-indigo-600 hover:text-indigo-500 font-medium">Registre-se</a>
+                <a href="/register" class="text-primary fw-medium text-decoration-none">Registre-se</a>
             </div>
         </form>
     </main>
 
-    <footer class="text-center text-sm text-gray-500">
+    <footer class="text-center small text-muted">
         Projeto pessoal desenvolvido por
-        <a href="https://github.com/deividsousan" class="text-indigo-600 hover:text-indigo-500 font-medium">
+        <a href="https://github.com/deividsousan" class="text-primary fw-medium text-decoration-none">
             @deividsousan
         </a>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
