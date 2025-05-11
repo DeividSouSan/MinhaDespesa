@@ -13,4 +13,14 @@ class User
         $this->password = $password;
         $this->token = $token;
     }
+
+    static function fromArray(array $array)
+    {
+        return new User(
+            $array['username'],
+            $array['email'],
+            $array['password_hash'],
+            $array['token']
+        );
+    }
 }
