@@ -12,7 +12,7 @@ class TransactionRepository
     {
         $transactions = $this->database->query("SELECT * FROM Transaction ORDER BY date DESC;");
         if ($transactions->num_rows == 0) {
-            return null;
+            return [];
         };
         return $transactions;
     }
