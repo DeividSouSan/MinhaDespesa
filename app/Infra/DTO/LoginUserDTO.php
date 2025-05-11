@@ -17,11 +17,16 @@ class LoginUserDTO
         $this->password = $password;
     }
 
+    /**
+     *  Cria um LoginUserDTO a partir de um array.
+     *
+     * @return LoginUserDTO
+     */
     public static function fromArray(array $array): LoginUserDTO
     {
         return new LoginUserDTO(
-            $array['email'],
-            $array['password'],
+            $array['email'] ?? '',
+            $array['password'] ?? '',
         );
     }
 }
