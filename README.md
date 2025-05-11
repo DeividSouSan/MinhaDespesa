@@ -1,51 +1,67 @@
-# MinhaDespesa
+# MinhaDespesa 💸
 
-> O **MinhaDespesa** é um sistema minimalista de gestão financeira pessoal, desenvolvido com o objetivo de proporcionar aos usuários uma maneira simples e intuitiva de acompanhar suas finanças. O foco principal é oferecer uma visão clara e objetiva da situação financeira, evitando complexidade desnecessária.
+O **MinhaDespesa** é um sistema minimalista de gestão financeira pessoal, desenvolvido com o objetivo de proporcionar aos usuários uma maneira simples e intuitiva de acompanhar suas finanças. Controle seus gastos, planeje seu orçamento e visualize suas movimentações de forma clara e objetiva.
 
+![cadastro final](https://github.com/user-attachments/assets/cf4fd6ea-6965-4582-b403-c939c342a562)
 
-![image](https://github.com/user-attachments/assets/130b14be-6108-42ed-ad0f-5afb544ee5ff)
-
-![image](https://github.com/user-attachments/assets/ce5dd097-4809-4f35-95fd-9ccd70254f0b)
-
-
-## Funcionalidades
-
-- [x] **Cadastro de Despesas e Receitas**: Permite o registro de despesas realizadas e receitas, facilitando o acompanhamento dos fluxos de caixa.
-- [ ] **Planejamento de Despesas Futuras**: Oferece a possibilidade de projetar despesas futuras, auxiliando no planejamento financeiro.
-- [ ] **Atualização e Remoção de Receitas e Despesas**: Permite ao usuário a possibilidade de atualizar e remover receitas e despesas já cadastradas.
-- [ ] **Visualização Intuitiva**: Fornece uma interface limpa e direta, garantindo que os usuários possam acessar rapidamente as informações financeiras essenciais.
-
-## Tecnologias Utilizadas
-
-- **PHP 8**: Linguagem de programação utilizada para o desenvolvimento do sistema.
-- **MySQL**: Sistema de gerenciamento de banco de dados relacional empregado para armazenar dados financeiros.
-- **Docker Compose**: Ferramenta utilizada para definir e executar aplicações Docker multi-contêiner, simplificando o ambiente de desenvolvimento e implantação.
-
-## Como Executar o Projeto
-
-Para executar o **MinhaDespesa** em seu ambiente local, siga os passos abaixo:
-
-1. **Clone este repositório**:
-
-   ```bash
-   git clone https://github.com/DeividSouSan/MinhaDespesa.git
-   ```
+![login perfeito](https://github.com/user-attachments/assets/facf626a-5163-4e54-ba47-1a88631dfd6c)
 
 
-2. **Acesse a pasta do projeto**:
+## ✨ Funcionalidades Principais
+*   🔐 **Criação de Conta**: Crie uma conta e salve suas transações.
+*   ✅ **Cadastro de Despesas e Receitas**: Registre todas as suas transações financeiras de forma rápida e fácil.
+*   ❌ **Remoção de Lançamentos**: Exclua despesas e receitas já cadastradas com facilidade.
+*   📊 **Visualização Intuitiva**: Uma interface limpa e direta para que você acesse rapidamente as informações financeiras essenciais.
 
-   ```bash
-   cd MinhaDespesa
-   ```
+## 🚀 Tecnologias Utilizadas
 
+*   **Backend**:
+    *   🐘 **PHP 8**: Linguagem de programação principal do sistema.
+*   **Banco de Dados**:
+    *   🐬 **MySQL**: Sistema de gerenciamento de banco de dados relacional para armazenar seus dados financeiros.
+*   **Ambiente de Desenvolvimento e Implantação**:
+    *   🐳 **Docker & Docker Compose**: Ferramentas para criar, gerenciar e executar a aplicação em contêineres, simplificando a configuração do ambiente.
+    *   🐖 **MailHog**: Servidor SMTP para testar o envio de E-Mails ao usuário final.
 
-3. **Certifique-se de que o Docker e o Docker Compose estão instalados** em seu sistema. Caso não estejam, siga as instruções de instalação disponíveis nos sites oficiais.
+## 🛠️ Como Executar o Projeto Localmente
 
-4. **Construa e inicie os contêineres**:
+Para colocar o **MinhaDespesa** para rodar no seu ambiente local, siga estes passos:
 
-   ```bash
-   docker compose up --build
-   ```
+1.  **Pré-requisitos**:
+    *   [Git](https://git-scm.com/downloads)
+    *   [Docker](https://www.docker.com/products/docker-desktop/)
+    *   [Docker Compose](https://docs.docker.com/compose/install/)
 
+2.  **Clone este repositório**:
+    ```bash
+    git clone https://github.com/DeividSouSan/MinhaDespesa.git
+    ```
 
-5. **Acesse a aplicação**: Após a conclusão do processo, abra seu navegador e visite `http://localhost/8080` para utilizar o sistema.
+3.  **Acesse a pasta do projeto**:
+    ```bash
+    cd MinhaDespesa
+    ```
+
+4.  **Construa e inicie os contêineres Docker**:
+    Este comando irá construir as imagens (se ainda não existirem) e iniciar os serviços definidos no `docker-compose.yml`.
+    ```bash
+    docker compose up --build -d
+    ```
+    *   A flag `-d` executa os contêineres em modo "detached" (em segundo plano).
+
+5.  **Acesse a aplicação**:
+    Após a conclusão do processo, abra seu navegador e visite:
+    `http://localhost:8080` (Confirme a porta no seu `docker-compose.yml` se for diferente)
+
+6.  **Para encerrar aplicação**:
+    ```bash
+    docker compose down
+    ```
+    
+## 📝 Licença
+
+Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes. (Se você não tiver um arquivo LICENSE, é uma boa prática adicionar um).
+
+---
+
+Feito  por [DeividSouSan](https://github.com/DeividSouSan) | [LinkedIn](https://www.linkedin.com/in/deividsousan/)
