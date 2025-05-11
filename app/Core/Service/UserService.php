@@ -61,12 +61,11 @@ class UserService
      */
     public function createFromDTO(CreateUserDTO $dto): User
     {
-        $user = new User();
-        $user->username = $dto->username;
-        $user->email = $dto->email;
-        $user->password = password_hash($dto->password, PASSWORD_BCRYPT);
-        $user->token = bin2hex(random_bytes(16));
-
-        return $user;
+        return new User(
+            $dto->username,
+            $dto->email,
+            password_hash($dto->password, PASSWORD_BCRYPT),
+            bin2hex(random_bytes(16))
+        );
     }
 }
