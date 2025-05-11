@@ -1,14 +1,17 @@
 <?php
+
+require '../app/Infra/DTO/_Exceptions.php';
+
 class LoginUserDTO
 {
-    public string $email;
-    public string $password;
+    public readonly string $email;
+    public readonly string $password;
 
     function __construct(string $email, string $password)
     {
         $is_missing_data = (empty($email) || empty($password));
 
-        if ($is_missing_data) throw new Exception('Faltam informações do usuário!');
+        if ($is_missing_data) throw new MissingUserCredentials();
 
         $this->email = $email;
         $this->password = $password;
