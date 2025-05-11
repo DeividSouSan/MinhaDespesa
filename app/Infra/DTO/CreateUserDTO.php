@@ -1,9 +1,9 @@
 <?php
 class CreateUserDTO
 {
-    public string  $username;
-    public string  $email;
-    public string  $password;
+    public string $username;
+    public string $email;
+    public string $password;
 
     function __construct(string $username, string $email, string $password, string $password_confirmation)
     {
@@ -12,14 +12,14 @@ class CreateUserDTO
         if ($is_missing_data) throw new Exception('Missing user data');
         if ($password !== $password_confirmation) throw new Exception('Password confirmation does not match');
 
-        $this->$username = $username;
-        $this->$email = $email;
-        $this->$password = $password;
+        $this->username = $username;
+        $this->email = $email;
+        $this->password = $password;
 
         $this->validate();
     }
 
-    static function fromArray(array $array): CreateUserDTO
+    public static function fromArray(array $array): CreateUserDTO
     {
         return new CreateUserDTO(
             $array['username'],
