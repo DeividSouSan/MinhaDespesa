@@ -8,9 +8,9 @@ O **MinhaDespesa** é um sistema minimalista de gestão financeira pessoal, dese
 
 
 ## ✨ Funcionalidades Principais
-*   🔐 **Criação de Conta**: Crie uma conta e salve suas receitas e despesas.
+*   🔐 **Criação de Conta**: Crie uma conta e salve suas transações.
 *   ✅ **Cadastro de Despesas e Receitas**: Registre todas as suas transações financeiras de forma rápida e fácil.
-*   ❌ **Remoção de Lançamentos**: Edite ou exclua despesas e receitas já cadastradas com facilidade.
+*   ❌ **Remoção de Lançamentos**: Exclua despesas e receitas já cadastradas com facilidade.
 *   📊 **Visualização Intuitiva**: Uma interface limpa e direta para que você acesse rapidamente as informações financeiras essenciais.
 
 ## 🚀 Tecnologias Utilizadas
