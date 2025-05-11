@@ -5,23 +5,28 @@ class CreateUserDTO
     public string  $email;
     public string  $password;
 
-    function __construct(array $array)
+    function __construct(string $username, string $email, string $password, string $password_confirmation)
     {
-        $username = $array['username'] ?? '';
-        $email = $array['email'] ?? '';
-        $password = $array['password'] ?? '';
-        $password_confirmation = $array['password-confirmation'] ?? '';
-
         $is_missing_data = (empty($username) || empty($email) || empty($password) || empty($password_confirmation));
 
         if ($is_missing_data) throw new Exception('Missing user data');
         if ($password !== $password_confirmation) throw new Exception('Password confirmation does not match');
 
-        $this->username = $array['username'];
-        $this->email = $array['email'];
-        $this->password = $array['password'];
+        $this->$username = $username;
+        $this->$email = $email;
+        $this->$password = $password;
 
         $this->validate();
+    }
+
+    static function fromArray(array $array): CreateUserDTO
+    {
+        return new CreateUserDTO(
+            $array['username'],
+            $array['email'],
+            $array['password'],
+            $array['password-confirmation'],
+        );
     }
 
     /**

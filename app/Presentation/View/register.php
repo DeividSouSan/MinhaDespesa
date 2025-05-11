@@ -13,8 +13,7 @@ if (isset($_SESSION['email'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-
-        $dto = new CreateUserDTO($_POST);
+        $dto = CreateUserDTO::fromArray($_POST);
 
         $repository = new UserRepository();
         $mailer = new MailerService();
