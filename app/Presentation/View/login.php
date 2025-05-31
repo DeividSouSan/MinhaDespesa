@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif ?>
         <?php endif ?>
 
-        <form action="/login" method="POST">
+        <form action="/login" method="POST" id='login-form'>
             <h2 class="h2 fw-bold text-dark mb-2">Entrar</h2>
             <p class="small text-muted mb-4">Acesse sua conta para gerenciar suas finanças.</p>
 
@@ -111,8 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="mb-3">
-                <input type="submit" value="Entrar"
-                    class="btn btn-primary w-100 py-2 fw-semibold" />
+                <input type="submit" value="🔒"
+                    class="btn btn-primary w-100 py-2 fw-semibold" id='submit-button' disabled/>
             </div>
 
             <div class="text-center small text-muted mt-4">
@@ -130,6 +130,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+    <script>
+        const registerForm = document.querySelector("#login-form");
+        const emailInput = document.querySelector('#email');
+        const passwordInput = document.querySelector('#password');
+        const submitButton = document.querySelector('#submit-button');
+
+        const isFilled = (inputElement) => {
+            if (inputElement.value.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        const fields = [emailInput, passwordInput];
+
+        registerForm.addEventListener('keyup', (event) => {
+            const allFieldsFilled = fields.every(isFilled);
+            console.log(allFieldsFilled);
+
+            if (allFieldsFilled) {
+                submitButton.value = '🔓 ENTRAR';
+                submitButton.disabled = false;
+            } else {
+                submitButton.value = '🔒';
+                submitButton.disabled = true;
+            }
+        });
+    </script>
 
 </body>
 

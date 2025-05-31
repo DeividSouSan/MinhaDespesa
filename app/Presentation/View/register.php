@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif; ?>
         <?php endif; ?>
 
-        <form action="/register" method="POST">
+        <form action="/register" method="POST" id="register-form">
             <h2 class="h2 fw-bold text-dark mb-2">Registre-se</h2>
             <p class="small text-muted mb-4">Cadastre-se agora para organizar suas finanças!</p>
 
@@ -96,8 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="mb-3">
-                <input type="submit" value="Registrar-se"
-                    class="btn btn-primary w-100 py-2 fw-semibold" />
+                <input type="submit" disabled value="🔒 (preencha os dados para se registrar)"
+                    class="btn btn-primary w-100 py-2 fw-semibold" id="submit-button" />
             </div>
             <div class="text-center small text-muted mt-4">
                 Já tem uma conta?
@@ -108,6 +108,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- Optional: Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+    <script>
+        const registerForm = document.querySelector("#register-form");
+        const nameInput = document.querySelector('#username');
+        const emailInput = document.querySelector('#email');
+        const passwordInput = document.querySelector('#password');
+        const passwordConfirmationInput = document.querySelector('#password-confirmation');
+        const submitButton = document.querySelector('#submit-button');
+
+        const isFilled = (inputElement) => {
+            if (inputElement.value.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        const fields = [nameInput, emailInput, passwordInput, passwordConfirmationInput];
+
+        registerForm.addEventListener('keyup', (event) => {
+            const allFieldsFilled = fields.every(isFilled);
+            console.log(allFieldsFilled);
+
+            if (allFieldsFilled) {
+                submitButton.value = '🔓 Cadastrar-se';
+                submitButton.disabled = false;
+            } else {
+                submitButton.value = '🔒 (preencha os dados para se registrar)';
+                submitButton.disabled = true;
+            }
+        });
+    </script>
 </body>
 
 </html>
