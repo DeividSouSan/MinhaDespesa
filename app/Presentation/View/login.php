@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!$match_password) throw new PasswordIncorrect();
 
         $_SESSION['UID'] = $db_user->id;
+        $_SESSION['Username'] = $db_user->username;
         header('Location: /finances');
     } catch (Exception $error) {
         $error_message = $error->getMessage();
