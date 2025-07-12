@@ -1,4 +1,5 @@
 <?php
+// Define as credenciais do banco de dados
 if (!defined('DATABASE_HOST')) define('DATABASE_HOST', 'mysql-database');
 if (!defined('DATABASE_PORT')) define('DATABASE_PORT', 3306);
 if (!defined('DATABASE_NAME')) define('DATABASE_NAME', 'local_db');
@@ -6,6 +7,8 @@ if (!defined('DATABASE_USER')) define('DATABASE_USER', 'local_user');
 if (!defined('DATABASE_PASSWORD')) define('DATABASE_PASSWORD', 'local_password');
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+// esse código será importado apenas uma vez
 
 try {
     $db = mysqli_connect(
@@ -16,32 +19,45 @@ try {
         DATABASE_PORT
     );
 
-    $create_transactions_table_query = $db->prepare("
-CREATE TABLE IF NOT EXISTS Transaction
-(
-id INT AUTO_INCREMENT PRIMARY KEY,
-value DECIMAL(10, 2) NOT NULL,
-category VARCHAR(255) NOT NULL,
-date DATE NOT NULL,
-description TEXT,
-type ENUM('despesa', 'receita') NOT NULL
-);");
+    $db->query(
+        "
+            CREATE TABLE IF NOT EXISTS Transactions
+            (
+            TransactionId INT AUTO_INCREMENT PRIMARY KEY,
+            Value DECIMAL(10, 2) NOT NULL,
+            Category VARCHAR(255) NOT NULL,
+            Date DATE NOT NULL,
+            Description TEXT,
+            Type ENUM('despesa', 'receita') NOT NULL
+            );"
+    );
 
-    $create_user_table_query = $db->prepare("
-CREATE TABLE IF NOT EXISTS User
-(
-id INT AUTO_INCREMENT PRIMARY KEY,
-username VARCHAR(255) NOT NULL UNIQUE,
-email VARCHAR(255) NOT NULL UNIQUE,
-password_hash VARCHAR(255) NOT NULL,
-token VARCHAR(255) NULL
-);");
+    $db->query(
+        "
+            CREATE TABLE IF NOT EXISTS Users
+            (
+            UserId INT AUTO_INCREMENT PRIMARY KEY,
+            Username VARCHAR(255) NOT NULL UNIQUE,
+            Email VARCHAR(255) NOT NULL UNIQUE,
+            PasswordHash VARCHAR(255) NOT NULL,
+            Token VARCHAR(255) NULL
+            );"
+    );
 
-    $create_transactions_table_query->execute();
-    $create_user_table_query->execute();
-} catch (mysqli_sql_exception $err) {
-    echo $err->getMessage();
-    echo 'Não foi possível conectar ao banco de dados.';
+    $db->query(
+        "
+            CREATE TABLE IF NOT EXISTS UserTransaction
+            (
+            UserTransactionId INT AUTO_INCREMENT PRIMARY KEY,
+            IdUser INT NOT NULL,
+            IdTransaction INT NOT NULL,
+            FOREIGN KEY (IdUser) REFERENCES Users(UserId),
+            FOREIGN KEY (IdTransaction) REFERENCES Transactions(TransactionId)
+            );"
+    );
+} catch (mysqli_sql_exception $error) { // qualquer exceção lançado pelo mysqli será desse exato tipo
+    error_log("Erro de Banco de Dados: " . $error->getMessage()); // mensagem para o desenvolvedor
+    die('Erro: Não foi possível inicializar o banco de dados. Tente novamente mais tarde.'); // encerra o script, mas poderia ser outra exceção
 }
 
-return $db ?? null;
+return $db;
