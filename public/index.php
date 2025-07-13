@@ -1,6 +1,4 @@
 <?php
-require '../app/Infra/Database/database.php';
-
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 session_start();
@@ -28,5 +26,6 @@ match ($path) {
     '/login' => require '../app/Presentation/View/login.php',
     '/logout' => require '../app/Presentation/View/logout.php',
     '/finances' => require '../app/Presentation/View/finances.php',
+    '/status' => require '../app/Presentation/View/status.php',
     default => require '../app/Presentation/View/404.php'
 };
