@@ -2,14 +2,14 @@
 // scripts/setup.php
 
 // Garante que o script seja executado a partir da raiz do projeto para os caminhos funcionarem
-require __DIR__ . '/app/Infra/Database/Connection.php';
+require __DIR__ . '/../app/Infra/Database/database.php';
 
 echo "🚀 Iniciando configuração do banco de dados...\n";
 
 try {
     // Apenas obter a instância é suficiente para acionar a conexão
     // e a lógica de criação de tabelas dentro da classe Connection.
-    $db->query(
+    query(
         "CREATE TABLE IF NOT EXISTS Transactions
         (
             TransactionId INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,7 +21,7 @@ try {
         );"
     );
 
-    $db->query(
+    query(
         "CREATE TABLE IF NOT EXISTS Users
         (
             UserId INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,7 +32,7 @@ try {
         );"
     );
 
-    $db->query(
+    query(
         "CREATE TABLE IF NOT EXISTS UserTransaction
         (
             UserTransactionId INT AUTO_INCREMENT PRIMARY KEY,
