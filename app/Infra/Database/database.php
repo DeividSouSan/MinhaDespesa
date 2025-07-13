@@ -1,7 +1,7 @@
 <?php
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-function query(string $query): mysqli_result
+function query(string $query): mysqli_result|bool
 {
     try {
         $db = new mysqli(
@@ -16,7 +16,7 @@ function query(string $query): mysqli_result
         return $result;
     } catch (mysqli_sql_exception $error) { // qualquer exceção lançado pelo mysqli será desse exato tipo
         error_log("Erro de Banco de Dados: " . $error->getMessage()); // mensagem para o desenvolvedor
-        die('Erro: Não foi possível inicializar o banco de dados. Tente novamente mais tarde.'); // encerra o script, mas poderia ser outra exceção
+        die("Erro: Não foi possível inicializar o banco de dados. Tente novamente mais tarde.\n"); // encerra o script, mas poderia ser outra exceção
     } finally {
         $db->close();
     }
