@@ -7,23 +7,23 @@ if (!in_array('--force', $argv)) {
     exit(1);
 }
 
-require_once __DIR__ . '/../app/Infra/Database/database.php';
+require_once __DIR__ . '/../app/database.php';
 
 echo "🔥 Iniciando limpeza do banco de dados...\n";
 
 try {
-    query('SET FOREIGN_KEY_CHECKS = 0;');
+    db_query('SET FOREIGN_KEY_CHECKS = 0;');
 
-    query('DROP TABLE IF EXISTS UserTransaction;');
+    db_query('DROP TABLE IF EXISTS UserTransaction;');
     echo "   - Tabela 'UserTransaction' removida.\n";
 
-    query('DROP TABLE IF EXISTS Transactions;');
+    db_query('DROP TABLE IF EXISTS Transactions;');
     echo "   - Tabela 'Transactions' removida.\n";
 
-    query('DROP TABLE IF EXISTS Users;');
+    db_query('DROP TABLE IF EXISTS Users;');
     echo "   - Tabela 'Users' removida.\n";
 
-    query('SET FOREIGN_KEY_CHECKS = 1;');
+    db_query('SET FOREIGN_KEY_CHECKS = 1;');
 
     echo "✅ Banco de dados limpo com sucesso!\n";
 
