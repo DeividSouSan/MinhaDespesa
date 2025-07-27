@@ -1,8 +1,8 @@
 <?php
 
-include "../app/models/user.php";
+require_once "../app/models/user.php";
 
-function users() {
+function register() {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         create_user($_POST['username'], $_POST['email'], $_POST['password']);
         return;

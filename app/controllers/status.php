@@ -1,5 +1,5 @@
 <?php
-include "../app/database.php";
+require_once "../app/database.php";
 
 // controller básico do /status
 function status() {

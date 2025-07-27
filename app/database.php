@@ -1,5 +1,5 @@
 <?php
-include '../app/errors.php';
+require_once '../app/errors.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
